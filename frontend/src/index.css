@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Inter:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 15px;
+    /* Reducing baseline from 16px to 15px for higher precision */
+  }
+
+  :root {
+    color-scheme: light;
+  }
+
+  body {
+    @apply font-body text-slate-800 antialiased overflow-x-hidden;
+    background-color: #F2F4F7;
+    background-image:
+      radial-gradient(circle at 0% 0%, rgba(124, 58, 237, 0.05), transparent 40%),
+      radial-gradient(circle at 100% 100%, rgba(245, 158, 11, 0.05), transparent 40%);
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-tight font-semibold text-indigoInk;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white/60 backdrop-blur-md border border-white/40 shadow-sm;
+  }
+
+  .glass-dark {
+    @apply bg-indigoInk/90 backdrop-blur-xl border border-white/5 shadow-2xl;
+  }
+
+  .text-glow {
+    text-shadow: 0 0 30px rgba(66, 153, 225, 0.2);
+  }
+
+  .hover-lift {
+    @apply transition-all duration-500 hover:-translate-y-2 hover:shadow-card hover:border-indigoInk/10;
+  }
+
+  .btn-primary {
+    @apply relative overflow-hidden bg-indigoInk text-white px-8 py-3 rounded-xl font-semibold uppercase tracking-[0.2em] text-[11px] transition-all hover:bg-night hover:shadow-xl active:scale-[0.98];
+  }
+
+  .btn-accent {
+    @apply bg-yarnSun text-indigoInk px-8 py-3 rounded-xl font-bold uppercase tracking-[0.2em] text-[11px] transition-all hover:bg-amber-400 hover:shadow-lg active:scale-[0.98];
+  }
+
+  .container-elite {
+    @apply mx-auto max-w-[1400px] px-6 lg:px-12;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+@keyframes slow-zoom {
+  0% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1.1);
+  }
+}
+
+.animate-slow-zoom {
+  animation: slow-zoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-reveal {
+  animation: reveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-up {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-up {
+  animation: scale-up 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(-50%, 5px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
