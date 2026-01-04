@@ -459,20 +459,24 @@ const Storefront = () => {
                 </div>
               ))}
             </div>
-            <div className="flex gap-16 border-t border-white/5 pt-12">
-              {quickStats.map((stat) => (
-                <div key={stat.label}>
-                  <p className="text-3xl lg:text-4xl font-semibold text-white tracking-tighter">{stat.value}</p>
-                  <p className="text-[8px] lg:text-[9px] font-bold uppercase tracking-[0.3em] text-white/20 mt-2">{stat.label}</p>
-                </div>
               ))}
-            </div>
           </div>
+          <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 border-t border-white/5 pt-8 lg:pt-12">
+            {quickStats.map((stat) => (
+              <div key={stat.label}>
+                <p className="text-3xl lg:text-4xl font-semibold text-white tracking-tighter">{stat.value}</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mt-1">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+      </div>
+    </div >
 
-          {/* Categories Card - White with Forced Style */}
-          <div
-            className="rounded-[40px] p-8 lg:p-16 border border-slate-200 shadow-xl shadow-slate-200/50 flex flex-col justify-between relative overflow-hidden h-full z-20 min-h-[500px]"
-            style={{ backgroundColor: '#ffffff' }}
+      {/* Categories Card - White with Forced Style */ }
+      < div
+  className = "rounded-[40px] p-8 lg:p-16 border border-slate-200 shadow-xl shadow-slate-200/50 flex flex-col justify-between relative overflow-hidden h-full z-20 min-h-[500px]"
+  style = {{ backgroundColor: '#ffffff' }
+}
           >
             <div className="space-y-8 relative z-10 w-full">
               <div>
@@ -512,9 +516,9 @@ const Storefront = () => {
                 See Full Range
               </button>
             </div>
-          </div>
-        </section>
-      </div>
+          </div >
+        </section >
+      </div >
 
       <ProductRangeDetails isOpen={showRangeModal} onClose={() => setShowRangeModal(false)} />
 
