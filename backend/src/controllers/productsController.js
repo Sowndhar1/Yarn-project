@@ -153,28 +153,14 @@ export const listProducts = async (req, res) => {
         const skip = (parseInt(page) - 1) * parseInt(limit);
 
         // Execute queries in parallel
-        const [
-            products,
-            total,
-            brands,
-            categories,
-            yarnTypes,
-            weights,
-            textures,
-            colors
-        ] = await Promise.all([
+        // Optimization: Removed unused filter queries to speed up loading
+        const [products, total] = await Promise.all([
             Product.find(query)
                 .sort(sort)
                 .skip(skip)
                 .limit(parseInt(limit))
-                .lean(), // Use lean() for faster execution since we don't need mongoose documents
-            Product.countDocuments(query),
-            Product.distinct('brand'),
-            Product.distinct('category'),
-            Product.distinct('yarnType'),
-            Product.distinct('weight'),
-            Product.distinct('texture'),
-            Product.distinct('color')
+                .lean(),
+            Product.countDocuments(query)
         ]);
 
         res.json({
@@ -184,14 +170,6 @@ export const listProducts = async (req, res) => {
                 limit: parseInt(limit),
                 total,
                 pages: Math.ceil(total / limit)
-            },
-            filters: {
-                brands: brands.sort(),
-                categories: categories.sort(),
-                yarnTypes: yarnTypes.sort(),
-                weights: weights.sort(),
-                textures: textures.sort(),
-                colors: colors.sort()
             }
         });
     } catch (error) {
