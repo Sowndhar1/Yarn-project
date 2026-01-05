@@ -120,6 +120,17 @@ const productSchema = new mongoose.Schema(
     }
 );
 
+// Indexes for performance optimization
+productSchema.index({ name: 'text', description: 'text', brand: 'text', tags: 'text' });
+productSchema.index({ category: 1 });
+productSchema.index({ brand: 1 });
+productSchema.index({ yarnType: 1 });
+productSchema.index({ color: 1 });
+productSchema.index({ pricePerKg: 1 });
+productSchema.index({ rating: -1 });
+productSchema.index({ createdAt: -1 });
+productSchema.index({ isAvailable: 1, stockKg: 1 }); // Composition for availability check
+
 const Product = mongoose.model('Product', productSchema);
 
 export default Product;

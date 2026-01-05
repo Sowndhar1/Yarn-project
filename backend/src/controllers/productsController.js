@@ -152,20 +152,30 @@ export const listProducts = async (req, res) => {
         // Pagination
         const skip = (parseInt(page) - 1) * parseInt(limit);
 
-        const products = await Product.find(query)
-            .sort(sort)
-            .skip(skip)
-            .limit(parseInt(limit));
-
-        const total = await Product.countDocuments(query);
-
-        // Get filter options for frontend
-        const brands = await Product.distinct('brand');
-        const categories = await Product.distinct('category');
-        const yarnTypes = await Product.distinct('yarnType');
-        const weights = await Product.distinct('weight');
-        const textures = await Product.distinct('texture');
-        const colors = await Product.distinct('color');
+        // Execute queries in parallel
+        const [
+            products,
+            total,
+            brands,
+            categories,
+            yarnTypes,
+            weights,
+            textures,
+            colors
+        ] = await Promise.all([
+            Product.find(query)
+                .sort(sort)
+                .skip(skip)
+                .limit(parseInt(limit))
+                .lean(), // Use lean() for faster execution since we don't need mongoose documents
+            Product.countDocuments(query),
+            Product.distinct('brand'),
+            Product.distinct('category'),
+            Product.distinct('yarnType'),
+            Product.distinct('weight'),
+            Product.distinct('texture'),
+            Product.distinct('color')
+        ]);
 
         res.json({
             data: products,
