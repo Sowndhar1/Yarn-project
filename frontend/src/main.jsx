@@ -7,13 +7,17 @@ import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import { FavoritesProvider } from "./context/FavoritesContext.jsx";
 
+import { ThemeProvider } from "./context/ThemeContext.jsx";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <AuthProvider>
         <CartProvider>
           <FavoritesProvider>
-            <App />
+            <ThemeProvider>
+              <App />
+            </ThemeProvider>
           </FavoritesProvider>
         </CartProvider>
       </AuthProvider>

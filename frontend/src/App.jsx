@@ -30,11 +30,14 @@ import InventoryDashboard from "./pages/inventory/InventoryDashboard.jsx";
 import ProductManagement from "./pages/inventory/ProductManagement.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
+import { useTheme } from "./context/ThemeContext.jsx";
+
 const App = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { theme } = useTheme();
 
   return (
-    <div className="relative overflow-x-hidden min-h-screen bg-loomGray">
+    <div className={`relative overflow-x-hidden min-h-screen ${theme === 'default' ? 'bg-loomGray' : ''}`}>
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
       <div
