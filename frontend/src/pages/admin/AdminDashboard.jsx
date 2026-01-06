@@ -1,6 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import { fetchAdminDashboardStats, updateOrderStatus } from '../../lib/api';
+import {
+  Briefcase,
+  ShoppingCart,
+  Users,
+  Package,
+  TrendingUp,
+  Activity,
+  Download,
+  ExternalLink,
+  ShieldCheck,
+  Clock,
+  Search,
+  Filter,
+  CheckCircle,
+  XCircle,
+  AlertCircle,
+  FileText
+} from 'lucide-react';
 
 const AdminDashboard = () => {
   const { user, token } = useAuth();
@@ -29,10 +47,33 @@ const AdminDashboard = () => {
   }, [token]);
 
   const stats = data ? [
-    { name: 'Total Revenue', value: `₹${data.stats.revenue.toLocaleString()}`, change: '+12%', icon: '💰', color: 'bg-emerald-500' },
-    { name: 'Total Orders', value: data.stats.orders, change: '+8%', icon: '📦', color: 'bg-indigo-500' },
-    { name: 'Active Customers', value: data.stats.customers, change: '+15%', icon: '👤', color: 'bg-amber-500' },
-    { name: 'Total Products', value: data.stats.products, icon: '🏷️', color: 'bg-rose-500' },
+    {
+      name: 'Total Revenue',
+      value: `₹${data.stats.revenue.toLocaleString()}`,
+      change: '+12%',
+      icon: <Briefcase className="w-6 h-6 text-emerald-600" />,
+      color: 'bg-emerald-50 border-emerald-100 text-emerald-600'
+    },
+    {
+      name: 'Total Orders',
+      value: data.stats.orders,
+      change: '+8%',
+      icon: <ShoppingCart className="w-6 h-6 text-indigo-600" />,
+      color: 'bg-indigo-50 border-indigo-100 text-indigo-600'
+    },
+    {
+      name: 'Active Customers',
+      value: data.stats.customers,
+      change: '+15%',
+      icon: <Users className="w-6 h-6 text-amber-600" />,
+      color: 'bg-amber-50 border-amber-100 text-amber-600'
+    },
+    {
+      name: 'Total Products',
+      value: data.stats.products,
+      icon: <Package className="w-6 h-6 text-rose-600" />,
+      color: 'bg-rose-50 border-rose-100 text-rose-600'
+    },
   ] : [];
 
   const handleOpen = (order) => {
@@ -168,24 +209,24 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen space-y-8 bg-[#f8fafc] pb-12">
       {/* Dynamic Header */}
-      <div className="relative overflow-hidden bg-slate-900 rounded-[2.5rem] p-10 text-white shadow-2xl shadow-slate-200">
+      <div className="relative overflow-hidden bg-slate-900 rounded-[2.5rem] p-10 shadow-2xl shadow-slate-200">
         <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl"></div>
         <div className="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-1">
             <div className="flex items-center gap-3 mb-2">
-              <span className="px-3 py-1 bg-indigo-500 rounded-lg text-[10px] font-black uppercase tracking-widest">Admin Mode</span>
+              <span className="px-3 py-1 bg-indigo-500 rounded-lg text-[10px] font-black uppercase tracking-widest text-white">Admin Mode</span>
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
             </div>
-            <h1 className="text-4xl font-black tracking-tighter">Admin Dashboard</h1>
+            <h1 className="text-4xl font-black tracking-tighter text-white">Admin Dashboard</h1>
             <p className="text-slate-400 font-bold">Overview of your business performance.</p>
           </div>
           <div className="flex items-center gap-4 bg-white/5 backdrop-blur-md p-4 rounded-3xl border border-white/10">
-            <div className="h-14 w-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-xl font-black shadow-lg">
+            <div className="h-14 w-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center text-xl font-black shadow-lg text-white">
               {user?.name?.charAt(0)}
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-widest text-indigo-300">Logged In</p>
-              <p className="text-lg font-black">{user?.name}</p>
+              <p className="text-lg font-black text-white">{user?.name}</p>
               <p className="text-xs font-bold text-slate-500">Administrator</p>
             </div>
           </div>
@@ -197,20 +238,25 @@ const AdminDashboard = () => {
         {stats.map((stat) => (
           <div key={stat.name} className="group relative overflow-hidden rounded-[2.5rem] bg-white p-8 shadow-sm transition-all hover:shadow-2xl hover:shadow-indigo-500/10 border border-slate-100">
             <div className="flex items-center justify-between mb-6">
-              <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${stat.color} bg-opacity-10 text-xl group-hover:scale-110 transition-transform`}>
-                <span className="filter drop-shadow-sm">{stat.icon}</span>
+              <div className={`flex h-12 w-12 items-center justify-center rounded-2xl ${stat.color} transition-transform group-hover:scale-110`}>
+                {stat.icon}
               </div>
               {stat.change && (
                 <div className="flex flex-col items-end">
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-tighter mb-0.5">Growth</span>
-                  <span className="inline-flex items-center text-xs font-black text-emerald-600">
+                  <span className="flex items-center gap-1 text-[10px] font-black text-slate-400 uppercase tracking-tighter mb-0.5">
+                    Growth <TrendingUp className="w-3 h-3" />
+                  </span>
+                  <span className="inline-flex items-center text-xs font-black text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">
                     {stat.change}
                   </span>
                 </div>
               )}
             </div>
             <p className="text-xs font-black uppercase tracking-[0.2em] text-slate-400">{stat.name}</p>
-            <p className="mt-1 text-3xl font-black tracking-tight text-slate-900">{stat.value}</p>
+            <p className="mt-2 text-3xl font-black tracking-tight text-slate-900">{stat.value}</p>
+
+            {/* Decoration */}
+            <div className="absolute -right-6 -bottom-6 w-24 h-24 rounded-full bg-current opacity-5 pointer-events-none" />
           </div>
         ))}
       </div>
@@ -221,15 +267,21 @@ const AdminDashboard = () => {
           <div className="rounded-[3rem] bg-white p-10 shadow-sm border border-slate-100">
             <div className="flex items-center justify-between mb-10">
               <div>
-                <h2 className="text-2xl font-black text-slate-900 tracking-tight">Recent Orders</h2>
-                <p className="text-sm font-bold text-slate-400">Latest customer orders</p>
+                <h2 className="text-2xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+                  Recent Orders
+                  <span className="px-3 py-1 bg-slate-100 rounded-full text-[10px] text-slate-500 uppercase tracking-widest">{data.recentOrders.length} New</span>
+                </h2>
+                <p className="text-sm font-bold text-slate-400 mt-1">Latest customer orders</p>
               </div>
               <div className="flex gap-2">
-                <button className="h-10 w-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:text-slate-900 transition-colors">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                <button className="h-10 w-10 flex items-center justify-center rounded-xl bg-slate-50 text-slate-400 hover:text-slate-900 transition-colors border border-slate-200">
+                  <Filter className="w-5 h-5" />
                 </button>
                 <div className="h-10 w-px bg-slate-100 mx-2"></div>
-                <button onClick={() => exportCSV()} className="px-6 py-2 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-slate-800 transition-colors">Download Report</button>
+                <button onClick={() => exportCSV()} className="px-6 py-2 bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-slate-800 transition-colors flex items-center gap-2 shadow-lg shadow-slate-900/20">
+                  <Download className="w-4 h-4" />
+                  Download Report
+                </button>
               </div>
             </div>
 
@@ -311,11 +363,24 @@ const AdminDashboard = () => {
               <svg className="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M11 15h2v2h-2zm0-8h2v6h-2zm1-9C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" /></svg>
             </div>
             <div className="relative z-10">
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-indigo-200 mb-2">System Status</p>
-              <h3 className="text-2xl font-black mb-4">Online</h3>
-              <p className="text-sm font-bold text-indigo-100/80 mb-8 leading-relaxed">System is running securely. All modules are active.</p>
-              <button onClick={() => setShowLogs(true)} className="w-full bg-white text-indigo-600 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-slate-50 transition-colors shadow-lg">
-                View Logs
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center backdrop-blur-md text-white">
+                  <Activity className="w-6 h-6 animate-pulse" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-200">System Status</p>
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <h3 className="text-lg font-black text-white">Online</h3>
+                  </div>
+                </div>
+              </div>
+              <p className="text-sm font-bold text-indigo-100/80 mb-8 leading-relaxed border-l-2 border-indigo-400/30 pl-4">
+                System is running securely. All database shards are active and synchronized.
+              </p>
+              <button onClick={() => setShowLogs(true)} className="w-full bg-white text-indigo-600 py-3.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-indigo-50 transition-all shadow-lg hover:shadow-xl transform active:scale-95 flex items-center justify-center gap-2">
+                <FileText className="w-4 h-4" />
+                View System Logs
               </button>
             </div>
           </div>

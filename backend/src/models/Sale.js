@@ -105,6 +105,11 @@ const saleSchema = new mongoose.Schema(
     }
 );
 
+// Indexes for faster dashboard stats
+saleSchema.index({ paymentStatus: 1 });
+saleSchema.index({ createdAt: -1 });
+
+
 const Sale = mongoose.model('Sale', saleSchema);
 
 export default Sale;

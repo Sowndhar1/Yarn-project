@@ -5,60 +5,55 @@ import Sale from '../models/Sale.js';
 
 export const getAdminStats = async (req, res, next) => {
     try {
-        const totalRevenueOrders = await Order.aggregate([
-            { $match: { status: { $ne: 'cancelled' } } },
-            { $group: { _id: null, total: { $sum: '$totalAmount' } } }
-        ]);
-
-        const totalRevenueSales = await Sale.aggregate([
-            { $match: { paymentStatus: 'paid' } },
-            { $group: { _id: null, total: { $sum: '$grandTotal' } } }
+        const [
+            totalRevenueOrders,
+            totalRevenueSales,
+            orderCount,
+            saleCount,
+            customerCount,
+            productCount,
+            recentOrders,
+            recentSales,
+            recentUsers,
+            salesByCategory
+        ] = await Promise.all([
+            Order.aggregate([
+                { $match: { status: { $ne: 'cancelled' } } },
+                { $group: { _id: null, total: { $sum: '$totalAmount' } } }
+            ]),
+            Sale.aggregate([
+                { $match: { paymentStatus: 'paid' } },
+                { $group: { _id: null, total: { $sum: '$grandTotal' } } }
+            ]),
+            Order.countDocuments(),
+            Sale.countDocuments(),
+            User.countDocuments({ role: 'customer' }),
+            Product.countDocuments(),
+            Order.find().populate('customer', 'name').sort({ createdAt: -1 }).limit(5),
+            Sale.find().sort({ createdAt: -1 }).limit(5),
+            User.find({ role: 'customer' }).sort({ createdAt: -1 }).limit(5),
+            Order.aggregate([
+                { $unwind: '$items' },
+                {
+                    $lookup: {
+                        from: 'products',
+                        localField: 'items.product',
+                        foreignField: '_id',
+                        as: 'product',
+                    },
+                },
+                { $unwind: '$product' },
+                {
+                    $group: {
+                        _id: '$product.category',
+                        totalAmount: { $sum: { $multiply: ['$items.quantity', '$items.price'] } },
+                    },
+                },
+                { $sort: { totalAmount: -1 } },
+            ])
         ]);
 
         const totalRevenue = (totalRevenueOrders[0]?.total || 0) + (totalRevenueSales[0]?.total || 0);
-
-        const orderCount = await Order.countDocuments();
-        const saleCount = await Sale.countDocuments();
-        const customerCount = await User.countDocuments({ role: 'customer' });
-        const productCount = await Product.countDocuments();
-
-        // Recent orders (Online)
-        const recentOrders = await Order.find()
-            .populate('customer', 'name')
-            .sort({ createdAt: -1 })
-            .limit(5);
-
-        // Recent Sales (Offline)
-        const recentSales = await Sale.find()
-            .sort({ createdAt: -1 })
-            .limit(5);
-
-        const recentUsers = await User.find({ role: 'customer' })
-            .sort({ createdAt: -1 })
-            .limit(5);
-
-        // Sales by category (Aggregate both or just orders? User asked for reports separation but this is 'Sales by Category' chart)
-        // For now, let's keep it as Orders-based to avoid complex merging, or if needed, can expand later. 
-        // Let's leave it as is for "Online Performance".
-        const salesByCategory = await Order.aggregate([
-            { $unwind: '$items' },
-            {
-                $lookup: {
-                    from: 'products',
-                    localField: 'items.product',
-                    foreignField: '_id',
-                    as: 'product',
-                },
-            },
-            { $unwind: '$product' },
-            {
-                $group: {
-                    _id: '$product.category',
-                    totalAmount: { $sum: { $multiply: ['$items.quantity', '$items.price'] } },
-                },
-            },
-            { $sort: { totalAmount: -1 } },
-        ]);
 
         res.json({
             success: true,

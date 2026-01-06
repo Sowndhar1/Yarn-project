@@ -421,7 +421,7 @@ const Storefront = () => {
             <div className="grid gap-6 md:grid-gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
               {filteredProducts.map((product) => (
                 <ProductCard
-                  key={product.id}
+                  key={product._id || product.id}
                   product={product}
                   onOrder={handleOrderIntent}
                   onLogin={() =>

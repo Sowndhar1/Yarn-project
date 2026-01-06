@@ -1,0 +1,2 @@
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)

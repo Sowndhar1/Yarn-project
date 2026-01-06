@@ -3,6 +3,13 @@ import User from "../models/User.js";
 import CustomerProfile from "../models/CustomerProfile.js";
 import StaffProfile from "../models/StaffProfile.js";
 import AdminProfile from "../models/AdminProfile.js";
+import fs from 'fs';
+import path from 'path';
+
+const logToFile = (msg) => {
+  const logPath = path.join(process.cwd(), 'debug_log.txt');
+  fs.appendFileSync(logPath, msg + '\n');
+};
 
 const sanitizeUser = (user, profile = null) => ({
   id: user._id.toString(),
@@ -27,12 +34,16 @@ export const login = async (req, res) => {
     }
 
     // Find user with matching credentials
+    const logMsg1 = `[LOGIN_DEBUG] Attempting login for: ${identifier}, type: ${loginType}`;
+    console.log(logMsg1);
+    logToFile(logMsg1);
+
     const user = await User.findOne({
       $and: [
         {
           $or: [
             { username: { $regex: new RegExp(`^${identifier}$`, 'i') } },
-            { email: { $regex: new RegExp(`^${identifier}$`, 'i') } }
+            { email: { $regex: new RegExp(`^${identifier}$`, 'i') } } // Case-insensitive email match
           ]
         },
         { isActive: true }
@@ -40,12 +51,22 @@ export const login = async (req, res) => {
     });
 
     if (!user) {
+      const logMsg2 = `[LOGIN_DEBUG] User not found or inactive for: ${identifier}`;
+      console.log(logMsg2);
+      logToFile(logMsg2);
       return res.status(401).json({ message: "Invalid credentials" });
     }
+
+    const logMsg3 = `[LOGIN_DEBUG] User found: ${user.username} (${user.role})`;
+    console.log(logMsg3);
+    logToFile(logMsg3);
 
     // Match password
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
+      const logMsg4 = `[LOGIN_DEBUG] Password mismatch for: ${user.username}`;
+      console.log(logMsg4);
+      logToFile(logMsg4);
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
