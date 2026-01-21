@@ -109,7 +109,7 @@ const Checkout = () => {
                     street: finalAddress.street,
                     city: finalAddress.city,
                     state: finalAddress.state,
-                    zipCode: finalAddress.postalCode, // Backend expects zipCode? or postalCode? Mapping to Schema
+                    postalCode: finalAddress.postalCode, // Backend expects postalCode? Standardizing...
                     country: finalAddress.country,
                     phone: user.phone || ''
                 },
@@ -117,7 +117,7 @@ const Checkout = () => {
                     street: finalAddress.street,
                     city: finalAddress.city,
                     state: finalAddress.state,
-                    zipCode: finalAddress.postalCode,
+                    postalCode: finalAddress.postalCode,
                     country: finalAddress.country
                 },
                 paymentMethod: paymentMethod,

@@ -14,8 +14,8 @@ const testLogin = async () => {
         await mongoose.connect(process.env.MONGODB_URI);
         console.log('✅ Connected to MongoDB');
 
-        const identifier = "test@example.com";
-        const password = "password123";
+        const identifier = "admin@yarnbusiness.com";
+        const password = "admin123";
 
         console.log(`🔍 Finding user: ${identifier}`);
         const user = await User.findOne({
@@ -35,6 +35,7 @@ const testLogin = async () => {
             process.exit(1);
         }
         console.log('✅ User found:', user.email);
+        console.log('🔒 User Hash:', user.password);
 
         console.log('🔑 Testing matchPassword...');
         // This is likely where it fails if 500

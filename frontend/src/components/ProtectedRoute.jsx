@@ -1,6 +1,5 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
-
 const ProtectedRoute = ({ roles, children }) => {
   const location = useLocation();
   const { user, loading, hasRole, hasAnyRole } = useAuth();
@@ -44,7 +43,7 @@ const ProtectedRoute = ({ roles, children }) => {
             return '/';
         }
       };
-      
+
       return <Navigate to={getRedirectPath(user.role)} replace />;
     }
   }

@@ -41,6 +41,13 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
         return;
       }
+
+      // Optimization: If user is already loaded, don't block navigation
+      if (user) {
+        setLoading(false);
+        return;
+      }
+
       setLoading(true);
       try {
         const { user: profile } = await fetchProfile(token);
@@ -62,7 +69,7 @@ export const AuthProvider = ({ children }) => {
       }
     };
     hydrate();
-  }, [token, navigate]);
+  }, [token, navigate]); // Removed user from dependencies to stabilize hydration
 
   // Helper function to get redirect path based on role
   const getRedirectPath = (role) => {

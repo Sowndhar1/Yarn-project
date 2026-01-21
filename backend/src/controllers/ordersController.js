@@ -134,6 +134,14 @@ export const getOrder = async (req, res) => {
 
     if (!order) return res.status(404).json({ message: "Order not found" });
 
+    // Authorization check: Customers can only view their own orders
+    if (req.user.role === 'customer') {
+      const customerId = order.customer?._id?.toString() || order.customer?.toString();
+      if (customerId !== req.user.id) {
+        return res.status(403).json({ message: "Not authorized to view this order" });
+      }
+    }
+
     res.json({
       ...order.toObject(),
       id: order._id,

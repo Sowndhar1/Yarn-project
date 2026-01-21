@@ -135,7 +135,7 @@ const YourAddresses = () => {
             {isAdding && (
                 <div className="max-w-2xl">
                     <h2 className="text-xl font-bold text-slate-800 mb-6">{isEditingIndex !== null ? 'Edit Address' : 'Add a new address'}</h2>
-                    <form onSubmit={handleSaveSaveAddress} className="space-y-6">
+                    <form onSubmit={handleSaveAddress} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label className="block text-sm font-bold text-slate-700 mb-1">Country/Region</label>

@@ -54,16 +54,31 @@ export const CartProvider = ({ children }) => {
             const existing = prev.find((item) => item.id === product.id);
 
             if (existing) {
-                // Update quantity if item already in cart
+                // Update quantity if item already in cart, but respect stock
+                const availableStock = product.stockKg || product.stockLevel || 999999;
+                const newQuantity = existing.quantity + quantity;
+
+                if (newQuantity > availableStock) {
+                    console.warn(`Stock limit reached for ${product.name}`);
+                    return prev.map((item) =>
+                        item.id === product.id
+                            ? { ...item, quantity: availableStock }
+                            : item
+                    );
+                }
+
                 return prev.map((item) =>
                     item.id === product.id
-                        ? { ...item, quantity: item.quantity + quantity }
+                        ? { ...item, quantity: newQuantity }
                         : item
                 );
             }
 
-            // Add new item to cart
-            return [...prev, { ...product, quantity }];
+            // Add new item to cart, but respect stock
+            const availableStock = product.stockKg || product.stockLevel || 999999;
+            const finalQuantity = Math.min(quantity, availableStock);
+
+            return [...prev, { ...product, quantity: finalQuantity }];
         });
     };
 
@@ -78,9 +93,13 @@ export const CartProvider = ({ children }) => {
         }
 
         setCartItems((prev) =>
-            prev.map((item) =>
-                item.id === productId ? { ...item, quantity } : item
-            )
+            prev.map((item) => {
+                if (item.id === productId) {
+                    const availableStock = item.stockKg || item.stockLevel || 999999;
+                    return { ...item, quantity: Math.min(quantity, availableStock) };
+                }
+                return item;
+            })
         );
     };
 

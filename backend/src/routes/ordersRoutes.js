@@ -13,7 +13,7 @@ const router = Router();
 router.get("/", authenticate, allowRoles("admin", "staff"), listOrders);
 router.get("/my-orders", authenticate, getMyOrders);
 router.post("/", authenticate, createOrder);
-router.get("/:id", authenticate, allowRoles("admin", "staff"), getOrder);
+router.get("/:id", authenticate, allowRoles("admin", "staff", "customer"), getOrder);
 router.patch(
   "/:id/status",
   authenticate,

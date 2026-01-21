@@ -78,6 +78,7 @@ const OrderModal = ({ product, onClose, onSubmit, submitting, error }) => {
                 type="number"
                 name="quantityKg"
                 min={1}
+                max={product.stockKg || 9999}
                 value={form.quantityKg}
                 onChange={handleChange}
                 required

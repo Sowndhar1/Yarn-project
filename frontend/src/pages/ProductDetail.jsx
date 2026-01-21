@@ -181,8 +181,15 @@ const ProductDetail = () => {
                   <span className="text-5xl font-black text-indigoInk tracking-tighter">₹{product.pricePerKg?.toLocaleString()}</span>
                   <span className="text-xl font-medium text-slate-400">/ kg</span>
                 </div>
-                <div className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded inline-block mt-2 border border-emerald-100">
-                  Includes 5% GST
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded inline-block border border-emerald-100">
+                    Includes 5% GST
+                  </div>
+                  {product.stockKg <= 0 && (
+                    <div className="text-xs font-bold text-red-600 bg-red-50 px-2 py-1 rounded inline-block border border-red-100">
+                      Out of Stock
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -191,24 +198,27 @@ const ProductDetail = () => {
                 <div className="flex items-center justify-between bg-slate-50 p-1.5 rounded-xl border border-slate-200">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 5))}
-                    className="w-10 h-10 flex items-center justify-center bg-white rounded-lg shadow-sm text-indigoInk hover:text-yarnSun font-bold transition-colors"
+                    disabled={product.stockKg <= 0}
+                    className="w-10 h-10 flex items-center justify-center bg-white rounded-lg shadow-sm text-indigoInk hover:text-yarnSun font-bold transition-colors disabled:opacity-50"
                   >-</button>
                   <div className="flex flex-col items-center">
-                    <span className="text-lg font-black text-slate-900">{quantity} kg</span>
+                    <span className="text-lg font-black text-slate-900">{product.stockKg > 0 ? `${quantity} kg` : '0 kg'}</span>
                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Quantity</span>
                   </div>
                   <button
-                    onClick={() => setQuantity(quantity + 5)}
-                    className="w-10 h-10 flex items-center justify-center bg-white rounded-lg shadow-sm text-indigoInk hover:text-yarnSun font-bold transition-colors"
+                    onClick={() => setQuantity(Math.min(product.stockKg || 999, quantity + 5))}
+                    disabled={product.stockKg <= 0 || quantity >= (product.stockKg || 0)}
+                    className="w-10 h-10 flex items-center justify-center bg-white rounded-lg shadow-sm text-indigoInk hover:text-yarnSun font-bold transition-colors disabled:opacity-50"
                   >+</button>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={handleAddToCart}
-                    className="col-span-1 py-3 px-4 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:border-indigoInk hover:text-indigoInk transition-all text-sm uppercase tracking-wide"
+                    disabled={product.stockKg <= 0}
+                    className="col-span-1 py-3 px-4 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-xl hover:border-indigoInk hover:text-indigoInk transition-all text-sm uppercase tracking-wide disabled:opacity-50 disabled:hover:border-slate-200 disabled:hover:text-slate-700"
                   >
-                    Add to Cart
+                    {product.stockKg <= 0 ? 'Out of Stock' : 'Add to Cart'}
                   </button>
                   <button
                     onClick={handleBuyNow}

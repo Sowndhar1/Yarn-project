@@ -33,8 +33,11 @@ export const login = async (req, res) => {
         .json({ message: "Username/email and password are required" });
     }
 
+    // Trim whitespace from identifier
+    const cleanIdentifier = identifier ? identifier.trim() : '';
+
     // Find user with matching credentials
-    const logMsg1 = `[LOGIN_DEBUG] Attempting login for: ${identifier}, type: ${loginType}`;
+    const logMsg1 = `[LOGIN_DEBUG] Attempting login for: '${cleanIdentifier}' (Before trim: '${identifier}'), type: ${loginType}`;
     console.log(logMsg1);
     logToFile(logMsg1);
 
@@ -42,8 +45,8 @@ export const login = async (req, res) => {
       $and: [
         {
           $or: [
-            { username: { $regex: new RegExp(`^${identifier}$`, 'i') } },
-            { email: { $regex: new RegExp(`^${identifier}$`, 'i') } } // Case-insensitive email match
+            { username: { $regex: new RegExp(`^${cleanIdentifier}$`, 'i') } },
+            { email: { $regex: new RegExp(`^${cleanIdentifier}$`, 'i') } } // Case-insensitive email match
           ]
         },
         { isActive: true }
@@ -51,15 +54,28 @@ export const login = async (req, res) => {
     });
 
     if (!user) {
-      const logMsg2 = `[LOGIN_DEBUG] User not found or inactive for: ${identifier}`;
+      const logMsg2 = `[LOGIN_DEBUG] User not found or inactive for: '${cleanIdentifier}'`;
       console.log(logMsg2);
       logToFile(logMsg2);
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials (User not found)" });
     }
 
     const logMsg3 = `[LOGIN_DEBUG] User found: ${user.username} (${user.role})`;
     console.log(logMsg3);
     logToFile(logMsg3);
+
+    // DEBUG HASH & ENV
+    const envDebug = `[LOGIN_DEBUG] DB_URI: ${process.env.MONGODB_URI ? 'Defined' : 'Undefined'}, CWD: ${process.cwd()}`;
+    const hashDebug = `[LOGIN_DEBUG] DB Hash: ${user.password}`;
+    console.log(envDebug);
+    console.log(hashDebug);
+    logToFile(envDebug);
+    logToFile(hashDebug);
+
+    // DEBUG PASSWORD (REMOVE LATER)
+    const passDebug = `[LOGIN_DEBUG] Received password length: ${password ? password.length : 0}, Is 'admin123'? ${password === 'admin123'}`;
+    console.log(passDebug);
+    logToFile(passDebug);
 
     // Match password
     const isMatch = await user.matchPassword(password);
@@ -67,7 +83,7 @@ export const login = async (req, res) => {
       const logMsg4 = `[LOGIN_DEBUG] Password mismatch for: ${user.username}`;
       console.log(logMsg4);
       logToFile(logMsg4);
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials (Password mismatch)" });
     }
 
     // Check if user type matches the login type

@@ -78,11 +78,12 @@ const Storefront = () => {
   useEffect(() => {
     if (location.state?.welcomeMessage) {
       setWelcomeToast(location.state.welcomeMessage);
+      // Clear location state immediately to prevent re-triggering toast on refresh/nav
+      navigate(location.pathname, { replace: true, state: {} });
       const timer = setTimeout(() => setWelcomeToast(""), 4000);
-      window.history.replaceState({}, document.title);
       return () => clearTimeout(timer);
     }
-  }, [location]);
+  }, [location, navigate]);
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev === 0 ? 1 : 0));

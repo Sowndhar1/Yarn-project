@@ -1,2 +1,196 @@
 [LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
 [LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Attempting login for: vishaalnp.23bir@kongu.edu, type: customer
+[LOGIN_DEBUG] User found: vishaalnp.23bir (customer)
+[LOGIN_DEBUG] Password mismatch for: vishaalnp.23bir
+[LOGIN_DEBUG] Attempting login for: vishaalnp.23bir@kongu.edu, type: customer
+[LOGIN_DEBUG] User found: vishaalnp.23bir (customer)
+[LOGIN_DEBUG] Attempting login for: admin, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: raj@gmail.com, type: customer
+[LOGIN_DEBUG] User not found or inactive for: raj@gmail.com
+[LOGIN_DEBUG] Attempting login for: raj@gmail.com, type: customer
+[LOGIN_DEBUG] User not found or inactive for: raj@gmail.com
+[LOGIN_DEBUG] Attempting login for: raj@gmail.com, type: customer
+[LOGIN_DEBUG] User not found or inactive for: raj@gmail.com
+[LOGIN_DEBUG] Attempting login for: admin, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin@yarnbusiness.com, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: admin, type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: 'admin@yarnbusiness.com' (Before trim: 'admin@yarnbusiness.com'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: 'admin@yarnbusiness.com' (Before trim: 'admin@yarnbusiness.com'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$PNNmR2uLXp.kmbKv3SRS5uAH4nGBduJDUrkjpt21w01I1.IS5MuC6
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$PNNmR2uLXp.kmbKv3SRS5uAH4nGBduJDUrkjpt21w01I1.IS5MuC6
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$PNNmR2uLXp.kmbKv3SRS5uAH4nGBduJDUrkjpt21w01I1.IS5MuC6
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$PNNmR2uLXp.kmbKv3SRS5uAH4nGBduJDUrkjpt21w01I1.IS5MuC6
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$PNNmR2uLXp.kmbKv3SRS5uAH4nGBduJDUrkjpt21w01I1.IS5MuC6
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$PNNmR2uLXp.kmbKv3SRS5uAH4nGBduJDUrkjpt21w01I1.IS5MuC6
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$PNNmR2uLXp.kmbKv3SRS5uAH4nGBduJDUrkjpt21w01I1.IS5MuC6
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Password mismatch for: admin
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$jK9bb3dt.iaou0m08A.CE.6q1iun96Da7snvq.O.CEGp8iiGx/fby
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Attempting login for: 'raj@gmail.com' (Before trim: 'raj@gmail.com'), type: customer
+[LOGIN_DEBUG] User not found or inactive for: 'raj@gmail.com'
+[LOGIN_DEBUG] Attempting login for: 'raj@gmail.com' (Before trim: 'raj@gmail.com'), type: customer
+[LOGIN_DEBUG] User not found or inactive for: 'raj@gmail.com'
+[LOGIN_DEBUG] Attempting login for: 'raj@gmail.com' (Before trim: 'raj@gmail.com'), type: customer
+[LOGIN_DEBUG] User not found or inactive for: 'raj@gmail.com'
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$jK9bb3dt.iaou0m08A.CE.6q1iun96Da7snvq.O.CEGp8iiGx/fby
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Attempting login for: 'admin@yarnbusiness.com' (Before trim: 'admin@yarnbusiness.com'), type: customer
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$jK9bb3dt.iaou0m08A.CE.6q1iun96Da7snvq.O.CEGp8iiGx/fby
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Attempting login for: 'admin@yarnbusiness.com' (Before trim: 'admin@yarnbusiness.com'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$jK9bb3dt.iaou0m08A.CE.6q1iun96Da7snvq.O.CEGp8iiGx/fby
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
