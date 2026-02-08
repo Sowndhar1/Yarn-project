@@ -118,6 +118,7 @@ const SalesDashboard = () => {
                     <th className="pb-4 pl-4">Customer</th>
                     <th className="pb-4">Date</th>
                     <th className="pb-4">Settlement</th>
+                    <th className="pb-4 text-center">Invoice</th>
                     <th className="pb-4 text-right pr-4">Payment Status</th>
                   </tr>
                 </thead>
@@ -141,6 +142,16 @@ const SalesDashboard = () => {
                       <td className="bg-slate-50/50 py-6">
                         <p className="text-lg font-black text-slate-900 tracking-tight">₹{sale.grandTotal?.toLocaleString()}</p>
                       </td>
+                      <td className="bg-slate-50/50 py-6 text-center">
+                        <button
+                          onClick={() => import('../../lib/ReportGenerator').then(mod => mod.generateInvoicePDF(sale))}
+                          className="p-2 bg-slate-200 rounded-full hover:bg-slate-300 transition-colors"
+                          title="Download Invoice"
+                        >
+                          📄
+                        </button>
+                      </td>
+
                       <td className="rounded-r-[2rem] bg-slate-50/50 py-6 pr-6 text-right">
                         <span className={`inline-flex items-center rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-tighter ${sale.paymentStatus === 'paid'
                           ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'

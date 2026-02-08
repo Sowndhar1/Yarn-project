@@ -73,9 +73,13 @@ export const createSale = async (req, res) => {
 
       // Update product stock
       // Note: Ideally wrap in transaction
-      if (product.stockLevel !== undefined) {
-        product.stockLevel = Math.max(0, (product.stockLevel || 0) - quantity);
-        await product.save();
+      // Update product stock atomically to bypass schema validation of other fields
+      // and ensure concurrency safety
+      if (product.stockKg !== undefined) {
+        await Product.updateOne(
+          { _id: product._id },
+          { $inc: { stockKg: -quantity } }
+        );
       }
     }
 
@@ -94,7 +98,7 @@ export const createSale = async (req, res) => {
       grandTotal: grandTotal,
       paymentStatus: paymentStatus || 'paid',
       paymentMethod: paymentMethod || 'cash',
-      createdBy: req.user?.userId
+      createdBy: req.user?.id
     });
 
     await newSale.save();
@@ -147,6 +151,36 @@ export const getSalesSummary = async (req, res) => {
 
     const pendingAmount = pendingSales[0]?.total || 0;
 
+    // Monthly Trend (Last 6 Months)
+    const sixMonthsAgo = new Date();
+    sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+    sixMonthsAgo.setDate(1); // Start of that month
+
+    const monthlyTrend = await Sale.aggregate([
+      { $match: { saleDate: { $gte: sixMonthsAgo } } },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$saleDate" },
+            month: { $month: "$saleDate" }
+          },
+          totalSales: { $sum: "$grandTotal" },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { "_id.year": 1, "_id.month": 1 } }
+    ]);
+
+    // Format trend data for frontend (Array of { name: 'Jan', sales: 1000 })
+    const formattedTrend = monthlyTrend.map(item => {
+      const date = new Date(item._id.year, item._id.month - 1);
+      return {
+        name: date.toLocaleString('default', { month: 'short' }),
+        sales: item.totalSales,
+        count: item.count
+      };
+    });
+
     res.json({
       success: true,
       data: {
@@ -155,10 +189,12 @@ export const getSalesSummary = async (req, res) => {
         averageOrderValue: salesCount > 0 ? (totalRevenue / salesCount).toFixed(2) : 0,
         pendingPayments: pendingAmount,
         topCustomers: [],
-        monthlyTrend: []
+        monthlyTrend: formattedTrend
       }
     });
+
   } catch (error) {
+    console.error('Error fetching sales summary:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 };

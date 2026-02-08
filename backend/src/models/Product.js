@@ -30,6 +30,10 @@ const productSchema = new mongoose.Schema(
             type: Number,
             default: 0,
         },
+        minStockLevel: {
+            type: Number,
+            default: 20, // Default 20kg threshold
+        },
         category: {
             type: String,
             required: true,
@@ -49,14 +53,15 @@ const productSchema = new mongoose.Schema(
         // Yarn-specific attributes
         yarnType: {
             type: String,
-            enum: ['cotton', 'wool', 'acrylic', 'polyester', 'silk', 'linen', 'bamboo', 'alpaca', 'cashmere', 'blend'],
+            enum: ['cotton', 'wool', 'acrylic', 'polyester', 'silk', 'linen', 'bamboo', 'alpaca', 'cashmere', 'blend', 'elastic', 'spandex', 'viscose', 'rayon', 'nylon', 'melange'],
             required: true,
         },
         weight: {
             type: String,
-            enum: ['lace', 'fingering', 'sport', 'dk', 'worsted', 'aran', 'chunky', 'bulky', 'super bulky'],
+            enum: ['lace', 'fingering', 'sport', 'dk', 'worsted', 'aran', 'chunky', 'bulky', 'super bulky', 'standard', 'fine', 'medium', 'heavy'],
             required: true,
         },
+
         length: {
             type: Number, // meters per kg
             required: true,

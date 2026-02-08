@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   fetchStockRecords,
   fetchStockAlerts,
@@ -23,6 +25,7 @@ const Icons = {
 };
 
 const StockManagement = () => {
+  const navigate = useNavigate();
   const [stockData, setStockData] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [movements, setMovements] = useState([]);
@@ -75,12 +78,47 @@ const StockManagement = () => {
   const handleStockAdjustment = async (productId, quantity, adjustmentType, notes) => {
     if (!token) return;
     try {
-      await updateStockQuantity(
+      const response = await updateStockQuantity(
         productId,
         { quantity, adjustmentType, notes },
         token
       );
-      await refreshData();
+
+      // Update local state immediately with returned data
+      if (response && response.data) {
+        setStockData(prev => prev.map(item =>
+          (String(item.productId) === String(productId) || String(item._id) === String(productId))
+            ? { ...item, quantity: response.data.newStock, stockStatus: (response.data.newStock <= (item.product.minStockLevel || 0) ? 'low' : 'normal') }
+            : item
+        ));
+
+        // Also update alerts if necessary
+        const newStock = response.data.newStock;
+        const minStock = selectedProduct?.product?.minStockLevel || 0;
+
+        if (newStock <= minStock) {
+          // Add or update alert
+          setAlerts(prev => {
+            const exists = prev.find(a => String(a.productId) === String(productId));
+            if (exists) {
+              return prev.map(a => String(a.productId) === String(productId) ? { ...a, quantity: newStock, deficit: minStock - newStock, urgency: newStock === 0 ? 'critical' : 'warning' } : a);
+            } else {
+              return [...prev, {
+                productId,
+                product: selectedProduct.product,
+                quantity: newStock,
+                minStockLevel: minStock,
+                deficit: minStock - newStock,
+                urgency: newStock === 0 ? 'critical' : 'warning'
+              }];
+            }
+          });
+        } else {
+          // Remove alert if stock is healthy
+          setAlerts(prev => prev.filter(a => String(a.productId) !== String(productId)));
+        }
+      }
+
       setShowAdjustment(false);
       setSelectedProduct(null);
     } catch (err) {
@@ -107,9 +145,14 @@ const StockManagement = () => {
     <div className="min-h-screen space-y-8 pb-12">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Stock Management</h1>
-          <p className="mt-1 text-slate-500 font-medium">Monitor and update your inventory levels</p>
+        <div className="flex items-center gap-4">
+          <button onClick={() => navigate(-1)} className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-400 shadow-sm ring-1 ring-slate-100 hover:text-indigo-600 transition-colors">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+          </button>
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900">Stock Management</h1>
+            <p className="mt-1 text-slate-500 font-medium">Monitor and update your inventory levels</p>
+          </div>
         </div>
         <button
           onClick={refreshData}
@@ -330,9 +373,9 @@ const StockManagement = () => {
         )}
       </div>
 
-      {/* Adjustment Modal Overlay */}
-      {showAdjustment && selectedProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      {/* Adjustment Modal Overlay - Portaled */}
+      {showAdjustment && selectedProduct && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowAdjustment(false)}></div>
           <div className="relative w-full max-w-lg animate-in fade-in zoom-in duration-200 rounded-3xl bg-white p-8 shadow-2xl">
             <div className="mb-8 flex items-center justify-between">
@@ -351,7 +394,8 @@ const StockManagement = () => {
               onCancel={() => setShowAdjustment(false)}
             />
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
@@ -359,7 +403,8 @@ const StockManagement = () => {
 
 const StockAdjustmentForm = ({ product, onSubmit, onCancel }) => {
   const [quantity, setQuantity] = useState('');
-  const [adjustmentType, setAdjustmentType] = useState('increase');
+  // Default to 'set' (Set Exact) as per user request to avoid "Add check logic" confusion
+  const [adjustmentType, setAdjustmentType] = useState('set');
   const [notes, setNotes] = useState('');
 
   const handleSubmit = (e) => {
@@ -404,11 +449,10 @@ const StockAdjustmentForm = ({ product, onSubmit, onCancel }) => {
       </div>
 
       <div className="space-y-2">
-        <label className="block text-xs font-black uppercase tracking-widest text-slate-400">Reason for Change</label>
+        <label className="block text-xs font-black uppercase tracking-widest text-slate-400">Reason (Optional)</label>
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          required
           rows="3"
           className="w-full rounded-2xl bg-slate-50 px-5 py-3 text-sm font-medium text-slate-900 outline-none border border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all"
           placeholder="Enter a brief reason..."

@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchProductDetail } from '../lib/api';
 import { useCart } from '../context/CartContext';
+import { useFavorites } from '../context/FavoritesContext'; // Added import
 import { useAuth } from '../context/AuthContext';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  const { toggleFavorite, isFavorite } = useFavorites(); // Added hook
   const { user } = useAuth();
 
   const [product, setProduct] = useState(null);
@@ -89,6 +91,8 @@ const ProductDetail = () => {
     navigate('/cart');
   };
 
+  const isFav = isFavorite(product.id || product._id); // Check favorite status
+
   return (
     <div className="min-h-screen bg-[#F2F4F7] text-slate-900 pb-20 font-sans">
       {/* Breadcrumb / Back Nav */}
@@ -134,8 +138,16 @@ const ProductDetail = () => {
             <img src={images[activeImage]} alt={product.name} className="relative z-10 max-w-[85%] max-h-[85%] object-contain drop-shadow-xl transition-transform duration-500 hover:scale-105" />
 
             <div className="absolute top-6 right-6 z-20">
-              <button className="p-3 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white shadow-sm border border-slate-100 text-slate-400 hover:text-red-500 transition-all hover:scale-110 active:scale-95">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" /></svg>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavorite(product);
+                }}
+                className="p-3 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white shadow-sm border border-slate-100 text-slate-400 hover:text-red-500 transition-all hover:scale-110 active:scale-95"
+              >
+                <svg className={`w-6 h-6 transition-colors ${isFav ? 'fill-red-500 text-red-500' : 'fill-none text-slate-400'}`} stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
               </button>
             </div>
           </div>
@@ -160,8 +172,7 @@ const ProductDetail = () => {
             <div className="flex items-center gap-4 text-sm font-medium border-b border-slate-200 pb-6">
               <span className="text-slate-500">Brand: <span className="text-indigoInk font-bold">{product.brand}</span></span>
               <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
-              <span className="text-slate-500">Quality: <span className="text-indigoInk font-bold">A+ Grade</span></span>
-              <span className="w-1 h-1 bg-slate-300 rounded-full"></span>
+              {/* Removed hardcoded Quality: A+ Grade */}
               <div className="flex items-center gap-1 text-yarnSun">
                 {[1, 2, 3, 4, 5].map(s => <svg key={s} className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>)}
                 <span className="text-slate-400 ml-1 text-xs">(Verified)</span>
@@ -257,14 +268,14 @@ const ProductDetail = () => {
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
                   <div className="text-slate-400 text-xs font-bold uppercase mb-1">Material</div>
-                  <div className="font-bold text-slate-800">{product.material || product.composition}</div>
+                  <div className="font-bold text-slate-800">{product.material || product.composition || 'N/A'}</div>
                 </div>
                 <div className="p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
                   <div className="text-slate-400 text-xs font-bold uppercase mb-1">Count</div>
                   <div className="font-bold text-slate-800">{product.count} ({product.yarnType})</div>
                 </div>
                 <div className="p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
-                  <div className="text-slate-400 text-xs font-bold uppercase mb-1">Size</div>
+                  <div className="text-slate-400 text-xs font-bold uppercase mb-1">Needle Size</div>
                   <div className="font-bold text-slate-800">{product.needleSize || 'Standard'}</div>
                 </div>
                 <div className="p-4 bg-white rounded-xl border border-slate-100 shadow-sm">
@@ -296,31 +307,11 @@ const ProductDetail = () => {
             </div>
           </div>
 
-          {/* Suggested / Sponsored Widget converted to "Related Inventory" */}
-          <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="text-xs font-black uppercase tracking-widest text-slate-500">Similar Products</h4>
-              <span className="text-[10px] bg-slate-200 px-2 py-0.5 rounded text-slate-500 font-bold">Recommended</span>
-            </div>
 
-            <div className="flex gap-4 items-center p-3 bg-white rounded-xl border border-slate-200 shadow-sm hover:border-indigoInk/20 transition-all cursor-pointer">
-              <div className="w-12 h-12 bg-slate-100 rounded-lg flex-shrink-0">
-                <img src="https://placehold.co/100x100/e2e8f0/475569?text=Alt" className="w-full h-full object-cover rounded-lg" alt="Alt" />
-              </div>
-              <div className="flex-1">
-                <div className="font-bold text-slate-900 text-sm">Premier Poly-Cotton 40s</div>
-                <div className="text-xs text-slate-500">Good quality alternative</div>
-              </div>
-              <div className="font-bold text-indigoInk text-sm">₹290/kg</div>
-              <button className="p-2 hover:bg-slate-50 rounded-full text-slate-400">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
-              </button>
-            </div>
-          </div>
 
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

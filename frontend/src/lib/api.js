@@ -147,6 +147,12 @@ export const fetchSales = (token, params = {}) => {
   return apiRequest(`/sales${query}`, { token });
 };
 
+export const fetchPurchases = (token, params = {}) => {
+  const qs = new URLSearchParams(params);
+  const query = qs.toString() ? `?${qs}` : "";
+  return apiRequest(`/purchases${query}`, { token });
+};
+
 export const fetchAdminDashboardStats = (token) =>
   apiRequest("/dashboard/admin/stats", { token });
 
@@ -176,3 +182,20 @@ export const updateProduct = (token, productId, productData) => {
 export const fetchProductDetail = (productId) => {
   return apiRequest(`/products/${productId}`);
 };
+
+// Wishlist API
+export const fetchWishlist = (token) =>
+  apiRequest("/wishlist", { token });
+
+export const addToWishlist = (token, productId) =>
+  apiRequest("/wishlist/add", {
+    method: "POST",
+    token,
+    body: { productId },
+  });
+
+export const removeFromWishlist = (token, productId) =>
+  apiRequest(`/wishlist/${productId}`, {
+    method: "DELETE",
+    token,
+  });

@@ -10,8 +10,8 @@ export const getAllStock = async (req, res) => {
     const stockData = products.map(product => ({
       ...product.toObject(),
       productId: product._id,
-      quantity: product.stockLevel || 0,
-      stockStatus: (product.stockLevel || 0) <= (product.minStockLevel || 0) ? 'low' : 'normal',
+      quantity: product.stockKg || 0,
+      stockStatus: (product.stockKg || 0) <= (product.minStockLevel || 20) ? 'low' : 'normal',
       product: product // maintain some compatibility
     }));
 
@@ -31,15 +31,15 @@ export const getProductStock = async (req, res) => {
     const product = await Product.findById(req.params.productId);
     if (!product) return res.status(404).json({ success: false, message: "Product not found" });
 
-    const stockStatus = (product.stockLevel || 0) <= (product.minStockLevel || 0) ? 'low' : 'normal';
+    const stockStatus = (product.stockKg || 0) <= (product.minStockLevel || 20) ? 'low' : 'normal';
 
     res.json({
       success: true,
       data: {
         ...product.toObject(),
-        quantity: product.stockLevel || 0,
+        quantity: product.stockKg || 0,
         stockStatus,
-        canFulfill: (product.stockLevel || 0) > 0,
+        canFulfill: (product.stockKg || 0) > 0,
         product
       }
     });
@@ -58,7 +58,7 @@ export const updateStock = async (req, res) => {
     const product = await Product.findById(productId);
     if (!product) return res.status(404).json({ success: false, message: 'Product not found' });
 
-    const previousStock = product.stockLevel || 0;
+    const previousStock = Number(product.stockKg || 0);
     let newQuantity = previousStock;
 
     if (adjustmentType === 'increase') {
@@ -69,11 +69,8 @@ export const updateStock = async (req, res) => {
       newQuantity = Number(quantity);
     }
 
-    product.stockLevel = newQuantity;
+    product.stockKg = newQuantity;
     await product.save();
-
-    // You might want to log this to a Movement model if you have one, 
-    // but for now updating the product is sufficient for the dashboard.
 
     res.json({
       success: true,
@@ -95,7 +92,7 @@ export const updateStock = async (req, res) => {
 
 export const getStockMovements = async (req, res) => {
   // For now, return empty or implement Movement model if it exists and is populated.
-  // Given the task is dashboard dynamic, and dashboard uses `recentOrders` for movements or 
+  // Given the task is dashboard dynamic, and dashboard uses `recentOrders` for movements or
   // `stockSummary.recentMovements`, let's just return empty array to prevent 500s.
   res.json({
     success: true,
@@ -107,15 +104,15 @@ export const getStockMovements = async (req, res) => {
 export const getLowStockAlerts = async (req, res) => {
   try {
     const products = await Product.find({
-      $expr: { $lte: ["$stockLevel", "$minStockLevel"] }
+      $expr: { $lte: ["$stockKg", { $ifNull: ["$minStockLevel", 20] }] }
     });
 
     const updates = products.map(p => ({
-      id: p._id,
+      productId: p._id,
       product: p,
-      currentStock: p.stockLevel,
-      minStockLevel: p.minStockLevel,
-      urgency: p.stockLevel === 0 ? 'critical' : 'warning'
+      currentStock: p.stockKg || 0,
+      minStockLevel: p.minStockLevel || 20,
+      urgency: (p.stockKg || 0) === 0 ? 'critical' : 'warning'
     }));
 
     res.json({ success: true, data: updates });
@@ -130,9 +127,9 @@ export const getStockSummary = async (req, res) => {
     const products = await Product.find();
 
     // Calculate total stock value
-    const totalStockValue = products.reduce((sum, p) => sum + ((p.stockLevel || 0) * (p.pricePerKg || 0)), 0);
+    const totalStockValue = products.reduce((sum, p) => sum + ((p.stockKg || 0) * (p.pricePerKg || 0)), 0);
     const totalProducts = products.length;
-    const lowStockCount = products.filter(p => (p.stockLevel || 0) <= (p.minStockLevel || 0)).length;
+    const lowStockCount = products.filter(p => (p.stockKg || 0) <= (p.minStockLevel || 20)).length;
 
     // Fetch recent movements from orders as a proxy
     const recentOrders = await Order.find().sort({ createdAt: -1 }).limit(5).populate('items.product');

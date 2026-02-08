@@ -118,7 +118,7 @@ const Storefront = () => {
       setLoading(true);
       setError("");
       try {
-        const result = await fetchProducts();
+        const result = await fetchProducts({ limit: 1000 });
         setProducts(result.data || []);
       } catch (err) {
         setError(err.message || "Unable to load catalog");

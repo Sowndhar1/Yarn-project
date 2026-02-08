@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { createSale, fetchProducts } from "../lib/api.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { Link, useNavigate } from "react-router-dom";
-import { generateInvoicePDF } from "../lib/InvoiceGenerator.js";
+import { generateInvoicePDF } from "../lib/ReportGenerator.js";
 
 const emptyCustomer = {
   name: "",
@@ -113,16 +113,31 @@ const SalesEntry = () => {
 
       const response = await createSale(payload, token);
 
-      // Prepare data for manual invoice generation
+      // Prepare data for manual invoice generation matching ReportGenerator schema
       const invoiceData = {
-        ...payload,
+        invoiceNumber: response.data?.invoiceNumber || 'INV-TEMP',
+        saleDate: new Date(),
+        customerName: customer.name,
+        customerAddress: customer.address,
+        customerGstin: customer.gstin,
+        customerPhone: customer.phone,
         items: items.map(item => {
           const product = products.find(p => p._id === item.productId);
-          return { ...item, productName: product ? product.name : 'Unknown Product' };
+          const qty = Number(item.quantity);
+          const rate = Number(item.ratePerKg);
+          const discount = Number(item.discount);
+          const taxable = (qty * rate) * (1 - discount / 100);
+          return {
+            product: { name: product ? product.name : 'Unknown Product' },
+            quantity: qty,
+            ratePerKg: rate,
+            taxableAmount: taxable
+          };
         }),
-        totals,
-        date: new Date(),
-        invoiceId: response.data?.invoiceNumber
+        subtotal: totals.subtotal,
+        totalGst: totals.gst,
+        grandTotal: totals.total,
+        referenceNumber: '-'
       };
 
       setLastSalePayload(invoiceData);
@@ -179,9 +194,9 @@ const SalesEntry = () => {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
-          <Link to="/sales/dashboard" className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-400 shadow-sm ring-1 ring-slate-100 hover:text-indigo-600 transition-colors">
+          <button onClick={() => navigate(-1)} className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-400 shadow-sm ring-1 ring-slate-100 hover:text-indigo-600 transition-colors">
             <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-          </Link>
+          </button>
           <div>
             <h1 className="text-3xl font-black tracking-tight text-slate-900">Sales Terminal</h1>
             <p className="text-sm font-bold text-slate-500">Offline Counter Sale Entry</p>
@@ -381,8 +396,8 @@ const SalesEntry = () => {
                   onChange={(e) => setPaymentStatus(e.target.value)}
                   className="w-full rounded-2xl bg-emerald-50 px-6 py-4 text-sm font-black text-emerald-700 outline-none ring-1 ring-emerald-200 focus:ring-2 focus:ring-emerald-500 transition-all"
                 >
-                  <option value="paid">✅ PAID</option>
-                  <option value="pending">⏳ PENDING</option>
+                  <option value="paid">Paid</option>
+                  <option value="pending">Pending</option>
                 </select>
               </div>
 
@@ -414,15 +429,18 @@ const SalesEntry = () => {
             </button>
           </div>
 
-          <div className="rounded-3xl bg-blue-600 p-8 text-white">
+          <div className="rounded-3xl bg-slate-900 p-8 text-white shadow-xl shadow-slate-200">
             <div className="flex items-center gap-4">
-              <div className="text-3xl">📊</div>
+              <div className="bg-white/10 p-3 rounded-xl">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+              </div>
               <div>
-                <p className="text-sm font-black">Report Generation</p>
-                <p className="text-[10px] font-bold text-blue-100">Sale will be recorded in the Offline Sales Ledger. Invoice can be downloaded manually.</p>
+                <p className="text-sm font-black uppercase tracking-wider">Report Generation</p>
+                <p className="text-[10px] font-bold text-slate-400 mt-1">Sale will be recorded in the Offline Sales Ledger. Invoice can be downloaded manually.</p>
               </div>
             </div>
           </div>
+
         </div>
       </form>
     </div>

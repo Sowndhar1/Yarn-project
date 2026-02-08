@@ -5,9 +5,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const getStockState = (stockKg) => {
-  if (stockKg >= 800) return { label: "High Capacity", color: "bg-emerald-50 text-emerald-600 border-emerald-100" };
-  if (stockKg >= 400) return { label: "Operating Stock", color: "bg-amber-50 text-amber-600 border-amber-100" };
-  if (stockKg > 0) return { label: "Low Reserve", color: "bg-rose-50 text-rose-600 border-rose-100" };
+  if (stockKg >= 800) return { label: "High Stock", color: "bg-emerald-50 text-emerald-600 border-emerald-100" };
+  if (stockKg >= 400) return { label: "In Stock", color: "bg-amber-50 text-amber-600 border-amber-100" };
+  if (stockKg > 0) return { label: "Low Stock", color: "bg-rose-50 text-rose-600 border-rose-100" };
   return { label: "Out of Stock", color: "bg-slate-50 text-slate-400 border-slate-100" };
 };
 
@@ -66,7 +66,7 @@ const ProductCard = ({ product }) => {
           </span>
           {product.updatedAt && (new Date() - new Date(product.updatedAt)) < 24 * 60 * 60 * 1000 && (
             <span className="rounded-full bg-emerald-500/90 text-white border border-emerald-400/50 px-3 py-1 text-[8px] font-black uppercase tracking-[0.2em] shadow-lg backdrop-blur-sm animate-pulse">
-              ✓ Verified Edit
+              ✓ Verified
             </span>
           )}
         </div>
@@ -105,11 +105,11 @@ const ProductCard = ({ product }) => {
         {/* Technical Grid */}
         <div className="mt-8 grid grid-cols-2 gap-4 border-t border-slate-50 pt-6">
           <div className="space-y-1">
-            <p className="text-[9px] font-black uppercase tracking-widest text-slate-300">Material Grade</p>
+            <p className="text-[9px] font-black uppercase tracking-widest text-slate-300">Material</p>
             <p className="text-xs font-semibold text-slate-600">{product.material}</p>
           </div>
           <div className="space-y-1">
-            <p className="text-[9px] font-black uppercase tracking-widest text-slate-300">Availability</p>
+            <p className="text-[9px] font-black uppercase tracking-widest text-slate-300">Stock</p>
             <p className="text-xs font-semibold text-slate-600">{product.stockKg} KG</p>
           </div>
         </div>

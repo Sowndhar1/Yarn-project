@@ -13,9 +13,9 @@ const Favorites = () => {
             <div className="min-h-screen bg-slate-50 flex flex-col pt-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-8 w-full space-y-8">
                     <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400">
-                        <span>Loom Operations</span>
+                        <span>Home</span>
                         <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" /></svg>
-                        <span className="text-indigo-600">Asset Shortlist</span>
+                        <span className="text-indigo-600">Favorites</span>
                     </nav>
 
                     <div className="bg-white rounded-3xl border border-slate-200 p-16 text-center space-y-8 shadow-sm">
@@ -25,16 +25,16 @@ const Favorites = () => {
                             </svg>
                         </div>
                         <div className="space-y-2">
-                            <h2 className="text-2xl font-black text-slate-900 tracking-tight">System Catalog Empty</h2>
+                            <h2 className="text-2xl font-black text-slate-900 tracking-tight">Your Favorites is Empty</h2>
                             <p className="text-slate-500 font-bold max-w-sm mx-auto">
-                                No assets have been flagged for procurement. Explore the global marketplace to initialize your curation.
+                                You haven't saved any items yet. Browse our products to find what you need.
                             </p>
                         </div>
                         <button
                             onClick={() => navigate('/')}
                             className="inline-flex items-center gap-2 px-8 py-4 bg-indigoInk text-white rounded-xl text-[10px] font-black uppercase tracking-[0.2em] hover:bg-slate-900 transition-all shadow-lg"
                         >
-                            Open Market Catalog
+                            Browse Products
                         </button>
                     </div>
                 </div>
@@ -48,27 +48,27 @@ const Favorites = () => {
                 {/* Breadcrumbs & Header */}
                 <div className="space-y-6">
                     <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400">
-                        <span>Loom Operations</span>
+                        <span>Home</span>
                         <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" /></svg>
-                        <span className="text-indigo-600">Asset Shortlist</span>
+                        <span className="text-indigo-600">Favorites</span>
                     </nav>
 
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div className="space-y-4">
-                            <h1 className="text-5xl font-black text-slate-900 tracking-tighter">Your Curated Assets</h1>
+                            <h1 className="text-5xl font-black text-slate-900 tracking-tighter">Your Favorites</h1>
                             <p className="text-slate-500 font-bold max-w-xl line-clamp-2">
-                                Review and manage your shortlisted yarn varieties. Verified assets are synchronized with your global procurement profile.
+                                Manage your saved items here. Check stock status and move easily to cart.
                             </p>
                         </div>
 
                         {/* Management Stats */}
                         <div className="flex bg-white rounded-2xl border border-slate-200 p-2 shadow-sm">
                             <div className="px-6 py-4 border-r border-slate-100">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Total SKU</p>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Total Items</p>
                                 <p className="text-xl font-black text-indigo-600">{favorites.length}</p>
                             </div>
                             <div className="px-6 py-4">
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Ready for Order</p>
+                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">In Stock</p>
                                 <p className="text-xl font-black text-emerald-500">100%</p>
                             </div>
                         </div>

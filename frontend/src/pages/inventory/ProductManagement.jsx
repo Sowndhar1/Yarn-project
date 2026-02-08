@@ -154,7 +154,7 @@ const ProductManagement = () => {
                     </div>
 
                     <button
-                        onClick={() => navigate('/storefront')}
+                        onClick={() => navigate(-1)}
                         className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white transition-all shadow-sm ring-1 ring-slate-100 group"
                         title="Back to Marketplace"
                     >
