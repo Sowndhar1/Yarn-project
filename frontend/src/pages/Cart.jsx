@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { fetchProducts } from '../lib/api';
 
 const Cart = () => {
     const { cartItems, removeFromCart, updateQuantity, clearCart, cartTotals, refreshCartItems } = useCart();
@@ -9,9 +10,24 @@ const Cart = () => {
     const navigate = useNavigate();
     const [orderNotes, setOrderNotes] = useState('');
     const [voucherCode, setVoucherCode] = useState('');
+    const [recommendations, setRecommendations] = useState([]);
+    const [recLoading, setRecLoading] = useState(false);
 
     useEffect(() => {
         refreshCartItems();
+        // Fetch recommendations
+        const loadRecs = async () => {
+            setRecLoading(true);
+            try {
+                const res = await fetchProducts({ limit: 4 });
+                setRecommendations(res.data || []);
+            } catch (err) {
+                console.error("Failed to load recommendations", err);
+            } finally {
+                setRecLoading(false);
+            }
+        };
+        loadRecs();
     }, []);
 
     useEffect(() => {
@@ -75,7 +91,7 @@ const Cart = () => {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50 py-8 px-4 font-sans text-slate-800">
+        <div className="min-h-screen bg-white py-8 px-4 font-sans text-slate-800">
             <div className="max-w-7xl mx-auto">
 
                 <div className="grid lg:grid-cols-4 gap-6">
@@ -163,7 +179,7 @@ const Cart = () => {
                         <div className="bg-white p-5 rounded-lg border border-slate-200 shadow-sm sticky top-4">
                             {/* Free Delivery Progress */}
                             {cartTotals.subtotal < freeShippingThreshold && (
-                                <div className="mb-6 p-3 bg-slate-50 rounded border border-slate-100">
+                                <div className="mb-6 p-3 bg-white rounded border border-slate-100 shadow-sm">
                                     <div className="flex items-center gap-2 text-xs text-slate-600 mb-2">
                                         <span className="font-medium">Add <span className="text-indigo-600 font-bold">₹{(freeShippingThreshold - (cartTotals?.subtotal || 0)).toLocaleString()}</span> for <span className="inline-flex items-center gap-1 font-bold text-green-700"><svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>FREE Delivery</span></span>
                                     </div>
@@ -196,6 +212,53 @@ const Cart = () => {
                     </div>
 
                 </div>
+
+                {/* Recommended Products Section - Filling the Space */}
+                <div className="mt-20 border-t border-slate-100 pt-16">
+                    <div className="flex items-center justify-between mb-8">
+                        <div>
+                            <h2 className="text-2xl font-black text-slate-900 tracking-tight">You might also like</h2>
+                            <p className="text-sm font-bold text-slate-400">Hand-picked for your business needs</p>
+                        </div>
+                        <Link to="/storefront" className="text-sm font-black text-indigo-600 hover:text-indigo-800 uppercase tracking-widest border-b-2 border-indigo-600/20 hover:border-indigo-600 transition-all pb-1">
+                            View All →
+                        </Link>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                        {recLoading ? (
+                            [1, 2, 3, 4].map(i => (
+                                <div key={i} className="animate-pulse space-y-4">
+                                    <div className="aspect-square bg-slate-100 rounded-2xl"></div>
+                                    <div className="h-4 bg-slate-100 rounded w-3/4 mx-auto"></div>
+                                    <div className="h-4 bg-slate-100 rounded w-1/4 mx-auto"></div>
+                                </div>
+                            ))
+                        ) : (
+                            recommendations.map((prod) => (
+                                <div
+                                    key={prod._id}
+                                    className="group cursor-pointer"
+                                    onClick={() => navigate(`/product/${prod._id}`)}
+                                >
+                                    <div className="relative aspect-square overflow-hidden rounded-3xl bg-slate-50 border border-slate-100 mb-4 transition-all duration-500 group-hover:shadow-2xl group-hover:shadow-indigo-500/10 group-hover:-translate-y-2">
+                                        <img
+                                            src={prod.thumbnail || 'https://placehold.co/400x400/f8fafc/6366f1?text=Yarn'}
+                                            alt={prod.name}
+                                            className="h-full w-full object-contain mix-blend-multiply p-6 transition-transform duration-700 group-hover:scale-110"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-6">
+                                            <span className="text-white text-xs font-black uppercase tracking-widest bg-white/20 backdrop-blur-md px-4 py-2 rounded-full ring-1 ring-white/30">View Details</span>
+                                        </div>
+                                    </div>
+                                    <h3 className="font-bold text-slate-800 text-sm group-hover:text-indigo-600 transition-colors uppercase tracking-tight text-center truncate">{prod.name}</h3>
+                                    <p className="mt-1 text-xs font-black text-indigo-600 text-center">₹{prod.pricePerKg?.toLocaleString()}</p>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
+
             </div>
         </div>
     );
