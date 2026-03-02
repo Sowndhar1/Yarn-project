@@ -37,7 +37,7 @@ const App = () => {
   const { theme } = useTheme();
 
   return (
-    <div className={`relative overflow-x-hidden min-h-screen ${theme === 'default' ? 'bg-loomGray' : ''}`}>
+    <div className={`relative overflow-x-hidden min-h-screen ${theme === 'default' ? 'bg-white' : ''}`}>
       <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
       <div
@@ -45,7 +45,7 @@ const App = () => {
           }`}
       >
         <Navbar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-        <main className="flex-grow px-4 pb-16 pt-6 sm:px-8">
+        <main className="flex-grow pb-16">
           <Routes>
             <Route path="/" element={<Storefront />} />
             <Route path="/about" element={<About />} />
