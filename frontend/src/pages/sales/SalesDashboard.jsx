@@ -49,7 +49,7 @@ const SalesDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen space-y-8 pb-12 bg-white">
+    <div className="min-h-screen space-y-8 pb-12 bg-slate-50/30">
       {/* Premium Gradient Header */}
       <div className="relative overflow-hidden bg-white border border-slate-200 rounded-[3rem] p-10 shadow-sm">
         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-20 -mt-20"></div>

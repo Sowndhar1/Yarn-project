@@ -40,7 +40,7 @@ const OrderSuccess = () => {
     }
 
     return (
-        <div className="min-h-screen bg-white py-12 px-4">
+        <div className="min-h-screen bg-[#F2F4F7] py-12 px-4">
             <div className="max-w-2xl mx-auto flex flex-col gap-6">
 
                 {/* Branding Header */}

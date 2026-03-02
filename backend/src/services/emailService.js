@@ -32,13 +32,13 @@ export const sendOrderConfirmationEmail = async (order, customerEmail) => {
         `).join('');
 
         const mailOptions = {
-            from: `"Shivam yarn agencies" <${process.env.EMAIL_FROM || 'orders@yarnbiz.in'}>`,
+            from: `"sowndhar1" <${process.env.EMAIL_FROM || 'orders@yarnbiz.in'}>`,
             to: customerEmail,
             subject: `Order Confirmation - #${order.orderNumber}`,
             html: `
                 <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
                     <div style="text-align: center; margin-bottom: 20px;">
-                        <h1 style="color: #4f46e5;">Shivam yarn agencies</h1>
+                        <h1 style="color: #4f46e5;">sowndhar1</h1>
                         <p style="font-size: 1.2em; font-weight: bold;">Order Confirmed!</p>
                     </div>
                     
@@ -100,7 +100,7 @@ export const sendOrderConfirmationEmail = async (order, customerEmail) => {
                         If you have any questions, please contact us at <a href="mailto:sowndharsv2006@gmail.com" style="color: #4f46e5;">sowndharsv2006@gmail.com</a>.
                     </p>
                     <p style="text-align: center; font-size: 0.8em; color: #999;">
-                        &copy; ${new Date().getFullYear()} Shivam yarn agencies. All rights reserved.
+                        &copy; ${new Date().getFullYear()} sowndhar1. All rights reserved.
                     </p>
                 </div>
             `,

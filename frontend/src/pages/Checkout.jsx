@@ -200,7 +200,7 @@ const Checkout = () => {
     if (!user) return null;
 
     return (
-        <div className="min-h-screen bg-white py-8 px-4 font-sans text-slate-800">
+        <div className="min-h-screen bg-slate-50 py-8 px-4 font-sans text-slate-800">
             <div className="max-w-6xl mx-auto flex items-center justify-between mb-8">
                 <div className="flex items-center gap-6">
                     <BackButton />

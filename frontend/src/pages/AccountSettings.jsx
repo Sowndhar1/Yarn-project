@@ -103,8 +103,8 @@ const AccountSettings = () => {
           {status.message && (
             <p
               className={`rounded-2xl px-4 py-3 text-sm ${status.type === "success"
-                  ? "bg-mintGlow/20 text-emerald-700"
-                  : "bg-rose-50 text-rose-600"
+                ? "bg-mintGlow/20 text-emerald-700"
+                : "bg-rose-50 text-rose-600"
                 }`}
             >
               {status.message}
