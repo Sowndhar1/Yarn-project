@@ -45,7 +45,7 @@ const App = () => {
           }`}
       >
         <Navbar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-        <main className="flex-grow pb-16">
+        <main className="flex-grow pb-0">
           <Routes>
             <Route path="/" element={<Storefront />} />
             <Route path="/about" element={<About />} />

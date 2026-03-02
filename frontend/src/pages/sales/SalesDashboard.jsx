@@ -41,15 +41,15 @@ const SalesDashboard = () => {
           {[1, 2, 3, 4].map(i => <div key={i} className="h-32 rounded-3xl bg-slate-100"></div>)}
         </div>
         <div className="grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2 h-96 rounded-3xl bg-slate-50"></div>
-          <div className="h-96 rounded-3xl bg-slate-50"></div>
+          <div className="lg:col-span-2 h-96 rounded-3xl bg-white border border-slate-100"></div>
+          <div className="h-96 rounded-3xl bg-white border border-slate-100"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen space-y-8 pb-12 bg-white">
+    <div className="min-h-screen space-y-8 pb-0 bg-white">
       {/* Premium Gradient Header */}
       <div className="relative overflow-hidden bg-white border border-slate-200 rounded-[3rem] p-10 shadow-sm">
         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
@@ -62,7 +62,7 @@ const SalesDashboard = () => {
             <h1 className="text-4xl font-black tracking-tight text-slate-900">Sales Overview</h1>
             <p className="text-slate-500 font-bold max-w-lg">Track your sales and invoice status.</p>
           </div>
-          <div className="flex items-center gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2rem] shadow-sm">
+          <div className="flex items-center gap-4 bg-white border border-slate-200 p-4 rounded-[2rem] shadow-sm">
             <div className="flex flex-col items-end">
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Sales Staff</p>
               <p className="text-lg font-black text-slate-900">{user?.name}</p>
@@ -125,7 +125,7 @@ const SalesDashboard = () => {
                 <tbody>
                   {recentSales.map((sale) => (
                     <tr key={sale._id} className="group transition-all duration-300">
-                      <td className="rounded-l-[2rem] bg-slate-50/50 py-6 pl-6">
+                      <td className="rounded-l-[2rem] bg-white py-6 pl-6">
                         <div className="flex items-center gap-4">
                           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 font-black text-slate-600 group-hover:text-emerald-600 group-hover:ring-emerald-200 transition-all">
                             {sale.customerName?.charAt(0)}
@@ -136,13 +136,13 @@ const SalesDashboard = () => {
                           </div>
                         </div>
                       </td>
-                      <td className="bg-slate-50/50 py-6">
+                      <td className="bg-white py-6">
                         <p className="text-sm font-bold text-slate-600">{new Date(sale.saleDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</p>
                       </td>
-                      <td className="bg-slate-50/50 py-6">
+                      <td className="bg-white py-6">
                         <p className="text-lg font-black text-slate-900 tracking-tight">₹{sale.grandTotal?.toLocaleString()}</p>
                       </td>
-                      <td className="bg-slate-50/50 py-6 text-center">
+                      <td className="bg-white py-6 text-center">
                         <button
                           onClick={() => import('../../lib/ReportGenerator').then(mod => mod.generateInvoicePDF(sale))}
                           className="p-2 bg-slate-200 rounded-full hover:bg-slate-300 transition-colors"
@@ -152,7 +152,7 @@ const SalesDashboard = () => {
                         </button>
                       </td>
 
-                      <td className="rounded-r-[2rem] bg-slate-50/50 py-6 pr-6 text-right">
+                      <td className="rounded-r-[2rem] bg-white py-6 pr-6 text-right">
                         <span className={`inline-flex items-center rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-tighter ${sale.paymentStatus === 'paid'
                           ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
                           : 'bg-amber-50 text-amber-700 border border-amber-100'
@@ -179,7 +179,7 @@ const SalesDashboard = () => {
                 { label: 'Analytics', icon: '📈', to: '#', theme: 'rose' },
                 { label: 'Settings', icon: '⚙️', to: '#', theme: 'amber' }
               ].map((act, i) => (
-                <Link key={i} to={act.to} className={`flex flex-col items-center justify-center gap-4 rounded-[2.5rem] bg-slate-50 p-8 transition-all hover:scale-105 group border border-slate-100`}>
+                <Link key={i} to={act.to} className={`flex flex-col items-center justify-center gap-4 rounded-[2.5rem] bg-white p-8 transition-all hover:scale-105 group border border-slate-100`}>
                   <span className="text-4xl filter group-hover:drop-shadow-lg transition-all">{act.icon}</span>
                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-900">{act.label}</span>
                 </Link>

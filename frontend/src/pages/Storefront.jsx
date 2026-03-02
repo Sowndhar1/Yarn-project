@@ -205,7 +205,7 @@ const Storefront = () => {
           >
             {/* Slide 1: Primary Brand & Search */}
             <div className="w-full shrink-0 relative flex flex-col lg:block">
-              <div className="absolute inset-0 bg-slate-50 opacity-20" />
+              <div className="absolute inset-0 bg-white opacity-20" />
               <div className="relative grid gap-8 lg:gap-16 px-6 py-12 lg:grid-cols-[1.3fr_0.7fr] lg:px-20 lg:py-32 h-full items-center">
                 <div className="space-y-6 lg:space-y-10 order-2 lg:order-1">
                   <div className="inline-flex items-center gap-3 rounded-full border border-slate-200 bg-white px-3 py-1.5 lg:px-4 lg:py-2 shadow-sm">
@@ -437,7 +437,7 @@ const Storefront = () => {
           )}
 
           {!loading && filteredProducts.length === 0 && (
-            <div className="rounded-[2rem] bg-slate-50 border border-slate-100 py-32 text-center mt-12">
+            <div className="rounded-[2rem] bg-white border border-slate-100 py-32 text-center mt-12">
               <h3 className="text-xl font-bold text-indigoInk mb-2 text-slate-400">No products found</h3>
               <p className="text-slate-300 text-sm font-medium">Please try a different search or category.</p>
             </div>
@@ -484,7 +484,7 @@ const Storefront = () => {
 
               <div className="grid gap-3">
                 {featuredCounts.map((item) => (
-                  <div key={item.label} className="group flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-indigoInk hover:!bg-white hover:shadow-md transition-all duration-300 cursor-default">
+                  <div key={item.label} className="group flex items-center justify-between p-4 rounded-xl bg-white border border-slate-100 hover:border-indigoInk hover:shadow-md transition-all duration-300 cursor-default">
                     <div>
                       <span className="block font-bold text-indigoInk text-sm group-hover:text-indigo-600 transition-colors">{item.label}</span>
                       <span className="text-[11px] font-medium text-slate-400">{item.detail}</span>

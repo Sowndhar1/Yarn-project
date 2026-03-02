@@ -48,7 +48,7 @@ const InventoryDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen space-y-8 pb-12 bg-white">
+    <div className="min-h-screen space-y-8 pb-0 bg-white">
       {/* Enterprise Inventory Header */}
       <div className="relative overflow-hidden bg-white border border-slate-200 rounded-[3rem] p-10 shadow-sm">
         <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
@@ -61,7 +61,7 @@ const InventoryDashboard = () => {
             <h1 className="text-4xl font-black tracking-tight text-slate-900">Inventory Assets</h1>
             <p className="text-slate-500 font-bold max-w-lg">Real-time stock reconciliation and global supply chain monitoring.</p>
           </div>
-          <div className="flex items-center gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2rem] shadow-sm">
+          <div className="flex items-center gap-4 bg-white border border-slate-200 p-4 rounded-[2rem] shadow-sm">
             <div className="flex flex-col items-end">
               <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Hub Controller</p>
               <p className="text-lg font-black text-slate-900">{user?.name}</p>
@@ -122,18 +122,18 @@ const InventoryDashboard = () => {
                 <tbody>
                   {lowStock.map((item) => (
                     <tr key={item._id} className="group">
-                      <td className="rounded-l-[2rem] bg-slate-50/50 py-6 pl-6">
+                      <td className="rounded-l-[2rem] bg-white py-6 pl-6">
                         <p className="font-black text-slate-900 uppercase tracking-tighter leading-none mb-1">{item.name}</p>
                         <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.category}</p>
                       </td>
-                      <td className="bg-slate-50/50 py-6 font-mono text-xs font-bold text-indigo-600">
+                      <td className="bg-white py-6 font-mono text-xs font-bold text-indigo-600">
                         {item.sku || 'N/A'}
                       </td>
-                      <td className="bg-slate-50/50 py-6 text-right">
+                      <td className="bg-white py-6 text-right">
                         <p className="text-lg font-black text-slate-900 leading-none mb-1">{item.stock}</p>
                         <p className="text-[10px] font-black text-rose-500 uppercase tracking-tighter">Min: {item.minStockThreshold || 10}</p>
                       </td>
-                      <td className="rounded-r-[2rem] bg-slate-50/50 py-6 pl-8">
+                      <td className="rounded-r-[2rem] bg-white py-6 pl-8">
                         <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${item.stock <= 2 ? 'bg-rose-100 text-rose-700 border border-rose-200 animate-pulse' : 'bg-amber-100 text-amber-700 border border-amber-200'}`}>
                           ● {item.stock <= 2 ? 'Critical' : 'Low Stock'}
                         </span>
