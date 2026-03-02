@@ -207,8 +207,35 @@ const Cart = () => {
                             >
                                 Proceed to Buy
                             </button>
-                        </div>
 
+                            {/* Trust Badges - Using the Space */}
+                            <div className="mt-6 pt-6 border-t border-slate-100 space-y-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex-shrink-0 w-8 h-8 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600">
+                                        🛡️
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black uppercase text-slate-800 tracking-widest">Secure Checkout</p>
+                                        <p className="text-[9px] font-medium text-slate-400">SSL Encrypted Transaction</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-center gap-3">
+                                    <div className="flex-shrink-0 w-8 h-8 bg-emerald-50 rounded-full flex items-center justify-center text-emerald-600">
+                                        ✨
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black uppercase text-slate-800 tracking-widest">Quality Assured</p>
+                                        <p className="text-[9px] font-medium text-slate-400">100% Premium Filament Yarn</p>
+                                    </div>
+                                </div>
+                                <div className="pt-2 flex justify-center gap-3 opacity-30 grayscale blur-[0.5px]">
+                                    <span className="text-[10px] font-bold">VISA</span>
+                                    <span className="text-[10px] font-bold">MASTERCARD</span>
+                                    <span className="text-[10px] font-bold">UPI</span>
+                                    <span className="text-[10px] font-bold">NET BANKING</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
