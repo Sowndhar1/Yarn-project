@@ -116,8 +116,8 @@ const CustomerLogin = () => {
                 setIdentifierError(validateIdentifier(event.target.value));
               }}
               className={`mt-2 w-full rounded-2xl border px-4 py-3 text-sm focus:outline-none transition-colors ${identifierStatus === 'exists' ? 'border-emerald-500 bg-emerald-50/30' :
-                identifierStatus === 'not_found' ? 'border-rose-500 bg-rose-50/30' :
-                  'border-slate-200 focus:border-indigoInk'
+                  identifierStatus === 'not_found' ? 'border-rose-500 bg-rose-50/30' :
+                    'border-slate-200 focus:border-indigoInk'
                 }`}
               placeholder="Email or 10-digit mobile"
               required

@@ -156,7 +156,7 @@ const SalesEntry = () => {
 
   if (notification?.type === 'success') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F2F4F7] p-4">
+      <div className="min-h-screen flex items-center justify-center bg-white p-4">
         <div className="bg-white rounded-[2.5rem] p-12 text-center max-w-lg w-full shadow-2xl space-y-8 animate-in fade-in zoom-in duration-300">
           <div className="w-24 h-24 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-4xl shadow-emerald-200 shadow-xl">
             ✓
@@ -192,7 +192,7 @@ const SalesEntry = () => {
   }
 
   return (
-    <div className="min-h-screen space-y-8 pb-20">
+    <div className="min-h-screen bg-white space-y-8 pb-20">
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">

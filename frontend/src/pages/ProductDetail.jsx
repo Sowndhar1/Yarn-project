@@ -53,7 +53,7 @@ const ProductDetail = () => {
   );
 
   if (error) return (
-    <div className="min-h-screen bg-[#F2F4F7] flex flex-col items-center justify-center p-8 text-center">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-8 text-center">
       <h2 className="text-2xl font-bold text-slate-800 mb-2">Unable to Load Product</h2>
       <p className="text-slate-500 mb-6">{error}</p>
       <button onClick={() => navigate('/')} className="px-6 py-2 bg-indigoInk text-white rounded-full text-sm font-bold">
@@ -95,7 +95,7 @@ const ProductDetail = () => {
   const isFav = isFavorite(product.id || product._id); // Check favorite status
 
   return (
-    <div className="min-h-screen bg-[#F2F4F7] text-slate-900 pb-20 font-sans">
+    <div className="min-h-screen bg-white text-slate-900 pb-20 font-sans">
       {/* Breadcrumb / Back Nav */}
       <div className="bg-white py-4 px-4 shadow-sm border-b border-slate-200 mb-8 sticky top-0 z-20 backdrop-blur-md bg-white/90">
         <div className="max-w-[1600px] mx-auto flex items-center justify-between">
