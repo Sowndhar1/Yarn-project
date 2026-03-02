@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { updateProfileRequest, changePasswordRequest } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
+import BackButton from '../../components/common/BackButton';
 
 const LoginSecurity = () => {
     const { user, token, setUser } = useAuth();
@@ -68,11 +69,14 @@ const LoginSecurity = () => {
 
     return (
         <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8 font-sans">
-            {/* Breadcrumb */}
-            <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
-                <button onClick={() => navigate('/my-account')} className="hover:underline hover:text-indigo-600">Your Account</button>
-                <span>&rsaquo;</span>
-                <span className="text-slate-800 font-medium">Login & Security</span>
+            {/* Breadcrumb / Header */}
+            <div className="flex items-center gap-4 mb-6">
+                <BackButton to="/my-account" />
+                <div className="flex items-center gap-2 text-sm text-slate-700 font-bold">
+                    <button onClick={() => navigate('/my-account')} className="hover:underline hover:text-indigo-600">Your Account</button>
+                    <span>&rsaquo;</span>
+                    <span className="text-slate-900 font-black">Login & Security</span>
+                </div>
             </div>
 
             <h1 className="text-3xl font-light text-slate-800 mb-8">Login & Security</h1>

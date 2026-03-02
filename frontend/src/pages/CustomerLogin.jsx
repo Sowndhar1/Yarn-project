@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext.jsx";
+import { checkIdentifierRequest } from "../lib/api";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const phoneRegex = /^[0-9]{10}$/;
 const leadingSpecialRegex = /^[^a-zA-Z0-9]/;
 
 const CustomerLogin = () => {
   const { user, login, loading, error } = useAuth();
-  const [email, setEmail] = useState("");
+  const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
+  const [identifierError, setIdentifierError] = useState("");
+  const [identifierStatus, setIdentifierStatus] = useState(null); // null, 'checking', 'exists', 'not_found'
   const [formError, setFormError] = useState("");
 
   const location = useLocation();
@@ -17,30 +20,64 @@ const CustomerLogin = () => {
   const from = location.state?.from || "/my-account";
   const successMessage = location.state?.message;
 
-  const validateEmail = (value) => {
-    if (!value.trim()) return "Enter a valid email.";
-    if (leadingSpecialRegex.test(value.trim())) {
+  const validateIdentifier = (value) => {
+    if (!value.trim()) return "Enter a valid email or mobile number.";
+    const clean = value.trim();
+
+    // Check if it's a phone number (just digits)
+    if (/^\d+$/.test(clean)) {
+      if (!phoneRegex.test(clean)) return "Enter a valid 10-digit mobile number.";
+      return "";
+    }
+
+    // Otherwise check as email
+    if (leadingSpecialRegex.test(clean)) {
       return "Email cannot start with a special character.";
     }
-    if (!emailRegex.test(value.trim())) {
+    if (!emailRegex.test(clean)) {
       return "Enter a valid email.";
     }
     return "";
   };
 
+  // Debounced identifier check
+  useEffect(() => {
+    const checkUser = async () => {
+      const validation = validateIdentifier(identifier);
+      if (validation || !identifier.trim()) {
+        setIdentifierStatus(null);
+        return;
+      }
+
+      setIdentifierStatus('checking');
+      try {
+        const response = await checkIdentifierRequest(identifier);
+        if (response.exists) {
+          setIdentifierStatus('exists');
+        } else {
+          setIdentifierStatus('not_found');
+        }
+      } catch (err) {
+        setIdentifierStatus(null);
+      }
+    };
+
+    const timeoutId = setTimeout(checkUser, 600);
+    return () => clearTimeout(timeoutId);
+  }, [identifier]);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const validation = validateEmail(email);
-    setEmailError(validation);
+    const validation = validateIdentifier(identifier);
+    setIdentifierError(validation);
     if (validation) return;
 
     setFormError("");
 
     try {
-      await login(email, password, 'customer');
-      // Navigation will be handled by AuthContext
+      await login(identifier, password, 'customer');
     } catch (err) {
-      setFormError(err.message || "Invalid email or password.");
+      setFormError(err.message || "Invalid email/mobile or password.");
     }
   };
 
@@ -51,14 +88,14 @@ const CustomerLogin = () => {
     return <Navigate to={from} replace />;
   }
 
-  const canSubmit = email.trim() && password.trim() && !emailError;
+  const canSubmit = identifier.trim() && password.trim() && !identifierError && identifierStatus !== 'checking';
 
   return (
     <section className="mx-auto max-w-xl rounded-[32px] bg-white p-8 shadow-2xl">
       <p className="text-xs uppercase tracking-[0.4em] text-slate-500">Customer login</p>
       <h1 className="mt-2 font-display text-3xl text-indigoInk">Login to your account</h1>
       <p className="mt-2 text-sm text-slate-500">
-        Enter your email and password to access your orders.
+        Enter your email or mobile number to access your orders.
       </p>
 
       {successMessage && (
@@ -69,27 +106,54 @@ const CustomerLogin = () => {
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-6">
         <div>
-          <label className="text-sm font-semibold text-indigoInk">Email address</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(event) => {
-              setEmail(event.target.value);
-              setEmailError(validateEmail(event.target.value));
-            }}
-            className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm focus:border-indigoInk focus:outline-none"
-            placeholder="you@example.com"
-            required
-          />
-          {emailError && <p className="mt-2 text-sm text-rose-600">{emailError}</p>}
+          <label className="text-sm font-semibold text-indigoInk">Email or Mobile Number</label>
+          <div className="relative">
+            <input
+              type="text"
+              value={identifier}
+              onChange={(event) => {
+                setIdentifier(event.target.value);
+                setIdentifierError(validateIdentifier(event.target.value));
+              }}
+              className={`mt-2 w-full rounded-2xl border px-4 py-3 text-sm focus:outline-none transition-colors ${identifierStatus === 'exists' ? 'border-emerald-500 bg-emerald-50/30' :
+                  identifierStatus === 'not_found' ? 'border-rose-500 bg-rose-50/30' :
+                    'border-slate-200 focus:border-indigoInk'
+                }`}
+              placeholder="Email or 10-digit mobile"
+              required
+            />
+            {identifierStatus === 'checking' && (
+              <div className="absolute right-4 top-[18px]">
+                <div className="w-5 h-5 border-2 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+              </div>
+            )}
+            {identifierStatus === 'exists' && (
+              <div className="absolute right-4 top-[18px] text-emerald-600">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+              </div>
+            )}
+          </div>
+          {identifierError && <p className="mt-2 text-sm text-rose-600">{identifierError}</p>}
+          {!identifierError && identifierStatus === 'not_found' && (
+            <p className="mt-2 text-sm text-rose-600 font-medium flex items-center gap-1">
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+              This number/email is not registered.
+            </p>
+          )}
+          {!identifierError && identifierStatus === 'exists' && (
+            <p className="mt-2 text-sm text-emerald-600 font-medium">Account verified! Proceed with password.</p>
+          )}
         </div>
         <div>
-          <label className="text-sm font-semibold text-indigoInk">Password</label>
+          <div className="flex justify-between items-center mb-1">
+            <label className="text-sm font-semibold text-indigoInk">Password</label>
+            <button type="button" className="text-xs font-bold text-indigoInk hover:underline">Forgot Password?</button>
+          </div>
           <input
             type="password"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
-            className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm focus:border-indigoInk focus:outline-none"
+            className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm focus:border-indigoInk focus:outline-none"
             placeholder="Enter password"
             required
           />
@@ -111,7 +175,7 @@ const CustomerLogin = () => {
       </form>
 
       <div className="mt-6 rounded-2xl border border-slate-200 p-4 text-xs text-slate-500">
-        Sample Customer Account: <strong>johndoe / customer123</strong>
+        Demo Account: <strong>sowndharsv2006@gmail.com / 912006_SV</strong>
       </div>
 
       <p className="mt-6 text-center text-sm text-slate-500">

@@ -264,3 +264,63 @@
 [LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
 [LOGIN_DEBUG] DB Hash: $2b$10$jK9bb3dt.iaou0m08A.CE.6q1iun96Da7snvq.O.CEGp8iiGx/fby
 [LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$jK9bb3dt.iaou0m08A.CE.6q1iun96Da7snvq.O.CEGp8iiGx/fby
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$jK9bb3dt.iaou0m08A.CE.6q1iun96Da7snvq.O.CEGp8iiGx/fby
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Attempting login for: 'kavin@gmail.com' (Before trim: 'kavin@gmail.com'), type: staff
+[LOGIN_DEBUG] User found: kavin (customer)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$MdHv7UIhm5CEKPvxMLZRo.KECqE..7MjpibkUww8gzENWbsvPJq6y
+[LOGIN_DEBUG] Received password length: 7, Is 'admin123'? false
+[LOGIN_DEBUG] Attempting login for: 'kavin@gmail.com' (Before trim: 'kavin@gmail.com'), type: customer
+[LOGIN_DEBUG] User found: kavin (customer)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$MdHv7UIhm5CEKPvxMLZRo.KECqE..7MjpibkUww8gzENWbsvPJq6y
+[LOGIN_DEBUG] Received password length: 7, Is 'admin123'? false
+[LOGIN_DEBUG] Attempting login for: 'admin@yarnbusiness.com' (Before trim: 'admin@yarnbusiness.com'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$jK9bb3dt.iaou0m08A.CE.6q1iun96Da7snvq.O.CEGp8iiGx/fby
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Attempting login for: 'kavin@gmail.com' (Before trim: 'kavin@gmail.com'), type: customer
+[LOGIN_DEBUG] User found: kavin (customer)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$MdHv7UIhm5CEKPvxMLZRo.KECqE..7MjpibkUww8gzENWbsvPJq6y
+[LOGIN_DEBUG] Received password length: 7, Is 'admin123'? false
+[LOGIN_DEBUG] Attempting login for: 'kavin@gmail.com' (Before trim: 'kavin@gmail.com'), type: customer
+[LOGIN_DEBUG] User found: kavin (customer)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$MdHv7UIhm5CEKPvxMLZRo.KECqE..7MjpibkUww8gzENWbsvPJq6y
+[LOGIN_DEBUG] Received password length: 7, Is 'admin123'? false
+[LOGIN_DEBUG] Attempting login for: 'sowndharsv2006@gmail.com' (Before trim: 'sowndharsv2006@gmail.com'), type: customer
+[LOGIN_DEBUG] User found: sowndharsv (customer)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$5rpordTe1ys/PtwXD6hOuO/xY6X82HcgLsC9sh0vYc3EmR4v/E80a
+[LOGIN_DEBUG] Received password length: 9, Is 'admin123'? false
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$lEh3u0jyUFtarlK3dn6PT.yElVr6v0mzmzVPhNNx5C2etHOFrCfea
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] Attempting login for: 'admin' (Before trim: 'admin'), type: staff
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$lEh3u0jyUFtarlK3dn6PT.yElVr6v0mzmzVPhNNx5C2etHOFrCfea
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] User found: admin (admin)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$lEh3u0jyUFtarlK3dn6PT.yElVr6v0mzmzVPhNNx5C2etHOFrCfea
+[LOGIN_DEBUG] Received password length: 8, Is 'admin123'? true
+[LOGIN_DEBUG] Attempting login for: 'sowndharsv2006@gmail.com' (Before trim: ' sowndharsv2006@gmail.com '), type: customer
+[LOGIN_DEBUG] User found: sowndharsv (customer)
+[LOGIN_DEBUG] DB_URI: Defined, CWD: D:\VI-Sem\Consultancy\Project\Replica\Clowns\yarn-10 - Copy\backend
+[LOGIN_DEBUG] DB Hash: $2b$10$5rpordTe1ys/PtwXD6hOuO/xY6X82HcgLsC9sh0vYc3EmR4v/E80a
+[LOGIN_DEBUG] Received password length: 9, Is 'admin123'? false

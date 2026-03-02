@@ -1,27 +1,27 @@
 import { useNavigate } from 'react-router-dom';
+import BackButton from '../../components/common/BackButton';
+import { ClipboardList, Factory, Truck, Package, Home } from 'lucide-react';
 
 const TrackPackage = () => {
     const navigate = useNavigate();
 
     const trackingSteps = [
-        { title: "Order Placed", date: "Jan 4, 10:30 AM", completed: true, icon: "📝" },
-        { title: "Processing", date: "Jan 4, 2:15 PM", completed: true, icon: "🏭" },
-        { title: "Shipped", date: "Jan 5, 9:00 AM", completed: true, icon: "🚚" },
-        { title: "Out for Delivery", date: "Expected Today", completed: false, active: true, icon: "📦" },
-        { title: "Delivered", date: "Expected Jan 6", completed: false, icon: "🏠" }
+        { title: "Order Placed", date: "Jan 4, 10:30 AM", completed: true, icon: <ClipboardList className="w-6 h-6" /> },
+        { title: "Processing", date: "Jan 4, 2:15 PM", completed: true, icon: <Factory className="w-6 h-6" /> },
+        { title: "Shipped", date: "Jan 5, 9:00 AM", completed: true, icon: <Truck className="w-6 h-6" /> },
+        { title: "Out for Delivery", date: "Expected Today", completed: false, active: true, icon: <Package className="w-6 h-6" /> },
+        { title: "Delivered", date: "Expected Jan 6", completed: false, icon: <Home className="w-6 h-6" /> }
     ];
 
     return (
         <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6 lg:px-8 font-sans">
             <div className="mb-8">
-                <button onClick={() => navigate('/my-account/orders')} className="text-slate-500 hover:text-indigo-600 flex items-center gap-2 mb-4 transition">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
-                    Back to Orders
-                </button>
+                <BackButton to="/my-account/orders" label="Back to Orders" className="mb-4" />
                 <div className="flex justify-between items-end">
                     <div>
                         <h1 className="text-3xl font-light text-slate-800">Track Package</h1>
-                        <p className="text-slate-500 mt-1">Tracking ID: <span className="font-mono font-bold text-slate-700">TRK-{Math.floor(Math.random() * 100000000)}</span></p>
+                        <p className="text-slate-700 mt-1 font-bold">
+                            Tracking ID: <span className="font-mono font-bold text-slate-700">TRK-{Math.floor(Math.random() * 100000000)}</span></p>
                     </div>
                     <div className="text-right hidden sm:block">
                         <p className="text-sm font-bold text-slate-400 uppercase tracking-wider">Estimated Delivery</p>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import BackButton from '../components/common/BackButton';
 import { createPurchase, fetchProducts } from "../lib/api.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import { Link, useNavigate } from "react-router-dom";
@@ -116,7 +117,8 @@ const PurchaseEntry = () => {
       await createPurchase(payload, token);
 
       setNotification({ type: "success", message: "Purchase record finalized successfully" });
-      setTimeout(() => navigate('/admin/dashboard'), 2000);
+      setTimeout(() => setNotification(null), 1500);
+      setTimeout(() => navigate('/admin/dashboard'), 1500);
     } catch (error) {
       setNotification({ type: "error", message: error.message });
     } finally {
@@ -129,12 +131,10 @@ const PurchaseEntry = () => {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate(-1)} className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-400 shadow-sm ring-1 ring-slate-100 hover:text-indigo-600 transition-colors">
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-          </button>
+          <BackButton />
           <div>
             <h1 className="text-3xl font-black text-slate-900 tracking-tight">Purchase Entry</h1>
-            <p className="text-slate-500 font-bold">Inbound material logistics entry</p>
+            <p className="text-slate-700 font-bold">Inbound material logistics entry</p>
           </div>
         </div>
       </div>
@@ -142,7 +142,13 @@ const PurchaseEntry = () => {
       {notification && (
         <div className={`rounded-3xl px-8 py-5 flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500 ${notification.type === "success" ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200" : "bg-rose-50 text-rose-700 ring-1 ring-rose-200"
           }`}>
-          <span className="text-xl">{notification.type === 'success' ? '✅' : '❌'}</span>
+          <div className={`p-2 rounded-full ${notification.type === 'success' ? 'bg-emerald-100' : 'bg-rose-100'}`}>
+            {notification.type === 'success' ? (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+            ) : (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            )}
+          </div>
           <span className="text-sm font-black uppercase tracking-wider">{notification.message}</span>
         </div>
       )}
@@ -219,7 +225,7 @@ const PurchaseEntry = () => {
             <div className="overflow-x-auto">
               <table className="w-full border-separate border-spacing-y-2">
                 <thead>
-                  <tr className="text-left text-[10px] font-black uppercase tracking-widest text-slate-400">
+                  <tr className="text-left text-[10px] font-black uppercase tracking-widest text-slate-700">
                     <th className="pb-2 pl-4">Material Component</th>
                     <th className="pb-2">Mass (kg)</th>
                     <th className="pb-2">Base Rate</th>
@@ -303,7 +309,7 @@ const PurchaseEntry = () => {
               </div>
               <div className="h-px bg-slate-100 my-4"></div>
               <div className="flex justify-between items-end">
-                <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Final Settlement</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">Final Settlement</span>
                 <span className="text-3xl font-black text-indigo-600">₹{totals.total.toLocaleString()}</span>
               </div>
             </div>
@@ -364,7 +370,7 @@ const PurchaseEntry = () => {
               </div>
               <div>
                 <p className="text-sm font-black uppercase tracking-wider">Purchase Protection</p>
-                <p className="text-[10px] font-bold text-slate-400 mt-1">All procurement entries are double-encrypted and logged to the central ledger for compliance.</p>
+                <p className="text-[10px] font-bold text-slate-700 mt-1">All procurement entries are double-encrypted and logged to the central ledger for compliance.</p>
               </div>
             </div>
           </div>

@@ -32,8 +32,10 @@ import {
   MoveUp,
   Plus,
   ArrowRight,
-  Wallet
+  Wallet,
+  ChevronLeft
 } from "lucide-react";
+import BackButton from "../components/common/BackButton";
 
 const Dashboard = () => {
   const [data, setData] = useState({
@@ -138,12 +140,15 @@ const Dashboard = () => {
     <div className="space-y-8 pb-12 animate-in fade-in duration-500">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-100 pb-6">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <Activity className="w-6 h-6 text-indigo-600" />
-            Analytical Dashboard
-          </h1>
-          <p className="text-slate-500 text-sm mt-1">Real-time overview of inventory, finance, and operations.</p>
+        <div className="flex items-center gap-4">
+          <BackButton />
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+              <Activity className="w-6 h-6 text-indigo-600" />
+              Dashboard
+            </h1>
+            <p className="text-slate-500 text-sm mt-1">Real-time overview of inventory, finance, and operations.</p>
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -152,12 +157,16 @@ const Dashboard = () => {
                 const { fetchSales } = await import('../lib/api');
                 const { generateSalesReport } = await import('../lib/ReportGenerator');
                 const res = await fetchSales(token, { limit: 1000 });
+                const salesData = res.data || res || [];
+                if (!Array.isArray(salesData)) {
+                  throw new Error("Invalid sales data received");
+                }
                 const start = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toLocaleDateString();
                 const end = new Date().toLocaleDateString();
-                generateSalesReport(res.data, start, end);
+                generateSalesReport(salesData, start, end);
               } catch (e) {
-                console.error(e);
-                alert("Failed to generate report");
+                console.error("Sales Report Error:", e);
+                alert(`Failed to generate Sales report: ${e.message}`);
               }
             }}
             className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-indigo-700 transition-all"
@@ -170,12 +179,16 @@ const Dashboard = () => {
                 const { fetchPurchases } = await import('../lib/api');
                 const { generatePurchaseReport } = await import('../lib/ReportGenerator');
                 const res = await fetchPurchases(token, { limit: 1000 });
+                const purchaseData = res.data || res || [];
+                if (!Array.isArray(purchaseData)) {
+                  throw new Error("Invalid purchase data received");
+                }
                 const start = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toLocaleDateString();
                 const end = new Date().toLocaleDateString();
-                generatePurchaseReport(res.data, start, end);
+                generatePurchaseReport(purchaseData, start, end);
               } catch (e) {
-                console.error(e);
-                alert("Failed to generate report");
+                console.error("Purchase Report Error:", e);
+                alert(`Failed to generate Purchase report: ${e.message}`);
               }
             }}
             className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-purple-700 transition-all"
@@ -191,10 +204,10 @@ const Dashboard = () => {
             System Live
           </span>
         </div>
-      </div>
+      </div >
 
       {/* KPI Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      < div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" >
         <StatCard
           title="Total Inventory Value"
           value={formatCurrency(stockSummary?.totalStockValue || 0)}
@@ -231,10 +244,10 @@ const Dashboard = () => {
           type="alert"
           subLabel="Requires Action"
         />
-      </div>
+      </div >
 
       {/* Quick Actions Section */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      < div className="grid grid-cols-2 md:grid-cols-4 gap-4" >
         <Link to="/sales/new" className="group bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-emerald-200 transition-all flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="bg-emerald-50 p-2 rounded-lg text-emerald-600 group-hover:bg-emerald-100 transition-colors">
@@ -271,16 +284,16 @@ const Dashboard = () => {
           </div>
           <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-amber-500 transition-colors opacity-0 group-hover:opacity-100" />
         </Link>
-      </div>
+      </div >
 
       {/* Main Content Split */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      < div className="grid grid-cols-1 lg:grid-cols-3 gap-8" >
 
         {/* Left Column: Financial Trends (2/3) */}
-        <div className="lg:col-span-2 space-y-8">
+        < div className="lg:col-span-2 space-y-8" >
 
           {/* Financial Chart */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200">
+          < div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200" >
             <div className="flex justify-between items-center mb-6">
               <div>
                 <h2 className="text-lg font-bold text-slate-800 flex items-center gap-2">
@@ -325,10 +338,10 @@ const Dashboard = () => {
                 </AreaChart>
               </ResponsiveContainer>
             </div>
-          </div>
+          </div >
 
           {/* Recent Orders List */}
-          <div className="bg-white rounded-2xl p-0 shadow-sm border border-slate-200 overflow-hidden">
+          < div className="bg-white rounded-2xl p-0 shadow-sm border border-slate-200 overflow-hidden" >
             <div className="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
               <h3 className="text-sm font-bold text-slate-700 flex items-center gap-2">
                 <Clock className="w-4 h-4 text-slate-400" /> Recent Orders
@@ -362,12 +375,12 @@ const Dashboard = () => {
                 <div className="p-8 text-center text-slate-400 text-xs text-slate-400">No recent orders yet.</div>
               )}
             </div>
-          </div>
+          </div >
 
-        </div>
+        </div >
 
         {/* Right Column: Alerts & Pending (1/3) */}
-        <div className="space-y-6">
+        < div className="space-y-6" >
           <div className="bg-white rounded-2xl p-0 shadow-sm border border-red-100 h-fit">
             <div className="p-5 border-b border-red-50 bg-red-50/30 flex justify-between items-center">
               <div className="flex items-start gap-3">
@@ -446,10 +459,10 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div >
 
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 

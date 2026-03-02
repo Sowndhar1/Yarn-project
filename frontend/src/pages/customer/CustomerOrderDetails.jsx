@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { fetchOrder } from '../../lib/api';
+import BackButton from '../../components/common/BackButton';
 
 const CustomerOrderDetails = () => {
     const { id } = useParams();
@@ -49,12 +50,15 @@ const CustomerOrderDetails = () => {
     return (
         <div className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 font-sans">
             {/* Breadcrumb / Header */}
-            <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
-                <button onClick={() => navigate('/my-account')} className="hover:underline hover:text-indigo-600">Your Account</button>
-                <span>&rsaquo;</span>
-                <button onClick={() => navigate('/my-account/orders')} className="hover:underline hover:text-indigo-600">Your Orders</button>
-                <span>&rsaquo;</span>
-                <span className="text-slate-800 font-medium">Order #{order.orderNumber || (order._id && order._id.slice(-6).toUpperCase())}</span>
+            <div className="flex items-center gap-4 mb-6">
+                <BackButton to="/my-account/orders" />
+                <div className="flex items-center gap-2 text-sm text-slate-700 font-bold">
+                    <button onClick={() => navigate('/my-account')} className="hover:underline hover:text-indigo-600">Your Account</button>
+                    <span>&rsaquo;</span>
+                    <button onClick={() => navigate('/my-account/orders')} className="hover:underline hover:text-indigo-600">Your Orders</button>
+                    <span>&rsaquo;</span>
+                    <span className="text-slate-900 font-black">Order #{order.orderNumber || (order._id && order._id.slice(-6).toUpperCase())}</span>
+                </div>
             </div>
 
             <div className="flex flex-col lg:flex-row gap-8">
@@ -66,7 +70,9 @@ const CustomerOrderDetails = () => {
 
                             <div className="flex flex-wrap gap-8 text-sm mb-8">
                                 <div>
-                                    <span className="block text-slate-500 font-medium mb-1">Ordered on</span>
+                                    <span className="block text-slate-700 font-bold mb-1">
+                                        Ordered on
+                                    </span>
                                     <span className="text-slate-800">{new Date(order.createdAt).toLocaleDateString()}</span>
                                 </div>
                                 <div className="border-l border-slate-200 pl-8">

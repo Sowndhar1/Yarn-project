@@ -23,7 +23,18 @@ export const CartProvider = ({ children }) => {
         try {
             const key = getCartKey();
             const saved = localStorage.getItem(key);
-            setCartItems(saved ? JSON.parse(saved) : []);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                // Sanitize and migrate old data formats
+                const sanitized = parsed.map(item => ({
+                    ...item,
+                    id: item.id || item._id,
+                    _id: item._id || item.id
+                })).filter(item => item.id); // Remove any items that still lack an ID
+                setCartItems(sanitized);
+            } else {
+                setCartItems([]);
+            }
         } catch {
             setCartItems([]);
         }
@@ -78,7 +89,15 @@ export const CartProvider = ({ children }) => {
             const availableStock = product.stockKg || product.stockLevel || 999999;
             const finalQuantity = Math.min(quantity, availableStock);
 
-            return [...prev, { ...product, quantity: finalQuantity }];
+            // Standardize ID
+            const normalizedProduct = {
+                ...product,
+                id: product.id || product._id,
+                _id: product._id || product.id,
+                quantity: finalQuantity
+            };
+
+            return [...prev, normalizedProduct];
         });
     };
 
@@ -120,8 +139,11 @@ export const CartProvider = ({ children }) => {
             // For now, we'll fetch them individually.
             const updatedItems = await Promise.all(
                 cartItems.map(async (item) => {
+                    const productId = item.id || item._id;
+                    if (!productId) return item;
+
                     try {
-                        const freshData = await fetchProductDetail(item.id);
+                        const freshData = await fetchProductDetail(productId);
                         if (freshData.success) {
                             return {
                                 ...item,
@@ -150,12 +172,8 @@ export const CartProvider = ({ children }) => {
             0
         );
 
-        const gst = cartItems.reduce(
-            (sum, item) => sum + (item.pricePerKg * item.quantity * (item.gstRate || 18)) / 100,
-            0
-        );
-
-        const shipping = subtotal > 5000 ? 0 : 200; // Free shipping above ₹5000
+        const gst = 0; // Testing: Set to 0 for all orders
+        const shipping = 0; // Testing: Set to 0 for all orders
         const total = subtotal + gst + shipping;
 
         return {

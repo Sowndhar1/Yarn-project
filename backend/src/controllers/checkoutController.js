@@ -3,6 +3,8 @@ import Order from '../models/Order.js';
 import Product from '../models/Product.js';
 import User from '../models/User.js';
 import { v4 as uuidv4 } from 'uuid';
+import { createRazorpayOrder, verifyPaymentSignature } from '../services/paymentService.js';
+import { sendOrderConfirmationEmail } from '../services/emailService.js';
 
 export const initiateCheckout = async (req, res) => {
     try {
@@ -16,24 +18,24 @@ export const initiateCheckout = async (req, res) => {
         // Check product availability and stock
         for (const item of cart.items) {
             if (!item.product.isAvailable) {
-                return res.status(400).json({ 
-                    message: `${item.product.name} is not available` 
+                return res.status(400).json({
+                    message: `${item.product.name} is not available`
                 });
             }
             if (item.product.stockKg < item.quantity) {
-                return res.status(400).json({ 
-                    message: `Insufficient stock for ${item.product.name}` 
+                return res.status(400).json({
+                    message: `Insufficient stock for ${item.product.name}`
                 });
             }
         }
 
-        // Calculate shipping cost (simple flat rate based on weight)
-        const shippingCost = calculateShippingCost(cart.totalWeight);
-        
-        // Calculate GST (18% for yarn products in India)
-        const gstAmount = cart.totalAmount * 0.18;
-        
-        const finalAmount = cart.totalAmount - cart.discountAmount + shippingCost + gstAmount;
+        // Calculate shipping cost: Set to 0 for testing
+        const shippingCost = 0;
+
+        // Calculate GST: Set to 0 for testing
+        const gstAmount = 0;
+
+        const finalAmount = cart.totalAmount + shippingCost + gstAmount;
 
         res.json({
             cart,
@@ -51,6 +53,7 @@ export const initiateCheckout = async (req, res) => {
 export const placeOrder = async (req, res) => {
     try {
         const {
+            items: bodyItems,
             shippingAddress,
             billingAddress,
             paymentMethod,
@@ -59,56 +62,143 @@ export const placeOrder = async (req, res) => {
             couponCode
         } = req.body;
 
+        console.log('Place Order: Received request body keys:', Object.keys(req.body));
+        if (req.body.items) {
+            console.log('Place Order: Items length:', req.body.items.length);
+        } else {
+            console.log('Place Order: Items field is MISSING in body');
+        }
+        console.log('Place Order: Full body:', JSON.stringify(req.body, null, 2));
+
         if (!shippingAddress || !paymentMethod) {
-            return res.status(400).json({ 
-                message: 'Shipping address and payment method are required' 
+            console.error('Place Order Error: Missing required fields', {
+                hasShippingAddress: !!shippingAddress,
+                paymentMethod
+            });
+            return res.status(400).json({
+                message: 'Shipping address and payment method are required'
             });
         }
 
+        let orderItems = [];
+        let subtotal = 0;
+        let totalWeight = 0;
+
+        console.log('--- PLACE ORDER LOUD DEBUG START ---');
+        console.log('User ID from token:', req.user.id);
+        console.log('Request body items:', JSON.stringify(bodyItems, null, 2));
+
+        // Try to get cart from DB first
         const cart = await Cart.findOne({ customer: req.user.id })
             .populate('items.product', 'name color brand thumbnail pricePerKg stockKg isAvailable');
 
-        if (!cart || cart.items.length === 0) {
-            return res.status(400).json({ message: 'Cart is empty' });
+        console.log('DB Cart found:', !!cart);
+        if (cart) {
+            console.log('DB Cart items count:', cart.items.length);
         }
 
-        // Final stock check
-        for (const item of cart.items) {
-            if (!item.product.isAvailable || item.product.stockKg < item.quantity) {
-                return res.status(400).json({ 
-                    message: `${item.product.name} is no longer available` 
+        if (cart && cart.items.length > 0) {
+            console.log('CASE: Using DB Cart');
+            // ... (rest of DB cart logic)
+            // [KEEP ORIGINAL LOGIC IN REPLACEMENT]
+            for (const item of cart.items) {
+                if (!item.product.isAvailable || item.product.stockKg < item.quantity) {
+                    return res.status(400).json({
+                        message: `${item.product.name} is no longer available or out of stock`
+                    });
+                }
+                orderItems.push({
+                    product: item.product._id,
+                    quantity: item.quantity,
+                    price: item.product.pricePerKg,
+                    productSnapshot: {
+                        name: item.product.name,
+                        color: item.product.color,
+                        brand: item.product.brand,
+                        thumbnail: item.product.thumbnail
+                    }
                 });
+                subtotal += item.product.pricePerKg * item.quantity;
+                totalWeight += item.quantity;
             }
+        } else if (bodyItems && bodyItems.length > 0) {
+            console.log('CASE: Using Body Items. Count:', bodyItems.length);
+            // Use Items from request body (validate against DB)
+            for (const item of bodyItems) {
+                const product = await Product.findById(item.productId || item.product);
+                if (!product) {
+                    console.log('Product not found in DB:', item.productId);
+                    return res.status(404).json({ message: `Product not found: ${item.productId}` });
+                }
+                if (!product.isAvailable || product.stockKg < item.quantity) {
+                    console.error('Place Order Error: Stock/Availability issues', {
+                        product: product.name,
+                        isAvailable: product.isAvailable,
+                        stock: product.stockKg,
+                        requested: item.quantity
+                    });
+                    return res.status(400).json({
+                        message: `${product.name} is no longer available or out of stock`
+                    });
+                }
+                orderItems.push({
+                    product: product._id,
+                    quantity: item.quantity,
+                    price: product.pricePerKg,
+                    productSnapshot: {
+                        name: product.name,
+                        color: product.color,
+                        brand: product.brand,
+                        thumbnail: product.thumbnail
+                    }
+                });
+                subtotal += product.pricePerKg * item.quantity;
+                totalWeight += item.quantity;
+            }
+        } else {
+            console.log('CASE: NO ITEMS FOUND ANYWHERE');
+            console.error('Place Order Error: No items found in DB cart or request body', {
+                userId: req.user.id,
+                bodyItemsCount: bodyItems?.length,
+                hasDbCart: !!cart
+            });
+            console.log('--- PLACE ORDER LOUD DEBUG END ---');
+            return res.status(400).json({ message: 'Cart is empty' });
         }
 
         // Generate order number
         const orderNumber = generateOrderNumber();
 
-        // Calculate costs
-        const shippingCost = calculateShippingCost(cart.totalWeight);
-        const gstAmount = cart.totalAmount * 0.18;
-        const finalAmount = cart.totalAmount - cart.discountAmount + shippingCost + gstAmount;
+        // Calculate final costs
+        let shippingCost = 0; // Testing: Always 0
+        let gstAmount = 0;
 
-        // Create order items with product snapshots
-        const orderItems = cart.items.map(item => ({
-            product: item.product._id,
-            quantity: item.quantity,
-            price: item.product.pricePerKg,
-            productSnapshot: {
-                name: item.product.name,
-                color: item.product.color,
-                brand: item.product.brand,
-                thumbnail: item.product.thumbnail
+        // Recalculate GST based on individual product rates
+        for (const item of bodyItems || cart.items) {
+            const product = await Product.findById(item.productId || item.product?._id || item.product);
+            if (product) {
+                const itemSubtotal = product.pricePerKg * item.quantity;
+                const rate = product.gstRate !== undefined ? product.gstRate : 18;
+                gstAmount += (itemSubtotal * rate) / 100;
             }
-        }));
+        }
+
+        const finalAmount = subtotal + shippingCost + gstAmount;
+
+        console.log('--- FINAL PRICING DEBUG ---');
+        console.log('Subtotal:', subtotal);
+        console.log('GST (forced 0% for test):', gstAmount);
+        console.log('Shipping (forced 0 for test):', shippingCost);
+        console.log('Final Amount (sent to Razorpay):', finalAmount);
+        console.log('---------------------------');
 
         // Create order
         const order = new Order({
             orderNumber,
             customer: req.user.id,
             items: orderItems,
-            subtotal: cart.totalAmount,
-            discountAmount: cart.discountAmount,
+            subtotal,
+            discountAmount: 0, // Coupons handled separately if needed
             couponCode: couponCode || '',
             shippingCost,
             gstAmount,
@@ -126,15 +216,17 @@ export const placeOrder = async (req, res) => {
         await order.save();
 
         // Update product stock
-        for (const item of cart.items) {
-            await Product.findByIdAndUpdate(item.product._id, {
+        for (const item of orderItems) {
+            await Product.findByIdAndUpdate(item.product, {
                 $inc: { stockKg: -item.quantity }
             });
         }
 
-        // Clear cart
-        cart.items = [];
-        await cart.save();
+        // Clear DB cart if it existed
+        if (cart) {
+            cart.items = [];
+            await cart.save();
+        }
 
         // Update user's order history
         await User.findByIdAndUpdate(req.user.id, {
@@ -148,6 +240,34 @@ export const placeOrder = async (req, res) => {
             .populate('customer', 'name email phone')
             .populate('items.product', 'name color brand');
 
+        // Handle Payment logic
+        if (paymentMethod === 'online') {
+            const razorpayResult = await createRazorpayOrder(finalAmount, orderNumber);
+
+            if (razorpayResult.success) {
+                // Save Razorpay Order ID to our order
+                order.paymentId = razorpayResult.order.id;
+                await order.save();
+
+                return res.status(201).json({
+                    message: 'Order created, proceed to payment',
+                    order: populatedOrder,
+                    razorpayOrderId: razorpayResult.order.id,
+                    amount: razorpayResult.order.amount,
+                    currency: razorpayResult.order.currency
+                });
+            } else {
+                // If Razorpay order creation fails, we might want to flag the order or handle accordingly
+                console.error('Razorpay order creation failed:', razorpayResult.error);
+                return res.status(500).json({ message: 'Failed to initialize payment' });
+            }
+        }
+
+        // If COD, send confirmation email immediately
+        if (paymentMethod === 'cod') {
+            await sendOrderConfirmationEmail(populatedOrder, populatedOrder.customer.email);
+        }
+
         res.status(201).json({
             message: 'Order placed successfully',
             order: populatedOrder
@@ -158,11 +278,69 @@ export const placeOrder = async (req, res) => {
     }
 };
 
+export const verifyPayment = async (req, res) => {
+    try {
+        const {
+            razorpay_order_id,
+            razorpay_payment_id,
+            razorpay_signature,
+            orderId
+        } = req.body;
+
+        const isVerified = verifyPaymentSignature(
+            razorpay_order_id,
+            razorpay_payment_id,
+            razorpay_signature
+        );
+
+        if (!isVerified) {
+            return res.status(400).json({ message: 'Payment verification failed: Invalid signature' });
+        }
+
+        const isMongoId = orderId.match(/^[0-9a-fA-F]{24}$/);
+        const query = isMongoId
+            ? { $or: [{ _id: orderId }, { orderNumber: orderId }] }
+            : { orderNumber: orderId };
+
+        const order = await Order.findOne(query).populate('customer', 'name email phone');
+        if (!order) {
+            return res.status(404).json({ message: 'Order not found' });
+        }
+
+        // Update order status
+        order.paymentStatus = 'paid';
+        order.paymentId = razorpay_payment_id;
+        order.status = 'confirmed';
+        await order.save();
+
+        // Update user stats
+        await User.findByIdAndUpdate(order.customer._id, {
+            $inc: { totalSpent: order.totalAmount }
+        });
+
+        // Send confirmation email
+        await sendOrderConfirmationEmail(order, order.customer.email);
+
+        res.json({
+            message: 'Payment verified and order confirmed',
+            order
+        });
+    } catch (error) {
+        console.error('Verify payment error:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
 export const processPayment = async (req, res) => {
     try {
         const { orderId, paymentMethod, paymentDetails } = req.body;
 
-        const order = await Order.findById(orderId);
+        const isMongoId = orderId.match(/^[0-9a-fA-F]{24}$/);
+        const query = isMongoId
+            ? { $or: [{ _id: orderId }, { orderNumber: orderId }] }
+            : { orderNumber: orderId };
+
+        const order = await Order.findOne(query);
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
         }
@@ -219,8 +397,15 @@ export const processPayment = async (req, res) => {
 export const getOrderStatus = async (req, res) => {
     try {
         const { orderNumber } = req.params;
+        console.log(`[DEBUG] getOrderStatus for: ${orderNumber}, User: ${req.user.id}`);
 
-        const order = await Order.findOne({ orderNumber })
+        // Try searching by orderNumber OR by MongoDB _id (in case frontend sends that)
+        const isMongoId = orderNumber.match(/^[0-9a-fA-F]{24}$/);
+        const query = isMongoId
+            ? { $or: [{ orderNumber: orderNumber }, { _id: orderNumber }] }
+            : { orderNumber: orderNumber };
+
+        const order = await Order.findOne(query)
             .populate('customer', 'name email')
             .populate('items.product', 'name color brand thumbnail');
 
@@ -229,7 +414,7 @@ export const getOrderStatus = async (req, res) => {
         }
 
         // Check if user owns this order or is admin/staff
-        if (order.customer._id.toString() !== req.user.id && 
+        if (order.customer._id.toString() !== req.user.id &&
             !['admin', 'staff', 'sales_staff'].includes(req.user.role)) {
             return res.status(403).json({ message: 'Unauthorized' });
         }
@@ -268,23 +453,23 @@ export const getCustomerOrders = async (req, res) => {
     } catch (error) {
         console.error('Get customer orders error:', error);
         res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error while fetching customer orders.' });
     }
 };
 
 // Helper functions
 function generateOrderNumber() {
     const date = new Date();
-    const dateStr = date.getFullYear().toString() + 
-                   (date.getMonth() + 1).toString().padStart(2, '0') + 
-                   date.getDate().toString().padStart(2, '0');
+    const dateStr = date.getFullYear().toString() +
+        (date.getMonth() + 1).toString().padStart(2, '0') +
+        date.getDate().toString().padStart(2, '0');
     const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
     return `YRN${dateStr}${random}`;
 }
 
-function calculateShippingCost(weight) {
-    // Simple shipping calculation: ₹50 for first kg, ₹20 per additional kg
-    if (weight <= 1) return 50;
-    return 50 + (weight - 1) * 20;
+function calculateShippingCost(subtotal) {
+    // Testing: Set to 0 for all orders
+    return 0;
 }
 
 function calculateEstimatedDelivery() {

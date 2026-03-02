@@ -80,7 +80,7 @@ const Storefront = () => {
       setWelcomeToast(location.state.welcomeMessage);
       // Clear location state immediately to prevent re-triggering toast on refresh/nav
       navigate(location.pathname, { replace: true, state: {} });
-      const timer = setTimeout(() => setWelcomeToast(""), 4000);
+      const timer = setTimeout(() => setWelcomeToast(""), 1000);
       return () => clearTimeout(timer);
     }
   }, [location, navigate]);

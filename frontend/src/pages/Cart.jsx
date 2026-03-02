@@ -90,61 +90,64 @@ const Cart = () => {
                             </div>
 
                             <div className="space-y-6">
-                                {cartItems.map((item) => (
-                                    <div key={item.id} className="border-b border-slate-100 pb-6 last:border-0 last:pb-0">
-                                        <div className="flex gap-4">
-                                            {/* Product Image */}
-                                            <div className="flex-shrink-0 w-32 h-32 bg-slate-50 border border-slate-200 rounded p-1 flex items-center justify-center sticky top-0">
-                                                <Link to={`/product/${item.id}`}>
-                                                    <img
-                                                        src={item.thumbnail}
-                                                        alt={item.name}
-                                                        className="max-h-full max-w-full object-contain mix-blend-multiply"
-                                                        onError={(e) => {
-                                                            e.target.onerror = null;
-                                                            e.target.src = 'https://placehold.co/400x400/f1f5f9/64748b?text=Yarn+Sample';
-                                                        }}
-                                                    />
-                                                </Link>
-                                            </div>
+                                {cartItems.map((item) => {
+                                    const pid = item._id || item.id;
+                                    return (
+                                        <div key={pid} className="border-b border-slate-100 pb-6 last:border-0 last:pb-0">
+                                            <div className="flex gap-4">
+                                                {/* Product Image */}
+                                                <div className="flex-shrink-0 w-32 h-32 bg-slate-50 border border-slate-200 rounded p-1 flex items-center justify-center sticky top-0">
+                                                    <Link to={`/product/${pid}`}>
+                                                        <img
+                                                            src={item.thumbnail}
+                                                            alt={item.name}
+                                                            className="max-h-full max-w-full object-contain mix-blend-multiply"
+                                                            onError={(e) => {
+                                                                e.target.onerror = null;
+                                                                e.target.src = 'https://placehold.co/400x400/f1f5f9/64748b?text=Yarn+Sample';
+                                                            }}
+                                                        />
+                                                    </Link>
+                                                </div>
 
-                                            {/* Product Details */}
-                                            <div className="flex-grow">
-                                                <div className="flex justify-between items-start">
-                                                    <div className="space-y-1">
-                                                        <Link to={`/product/${item.id}`} className="text-lg font-bold text-slate-800 hover:text-indigo-600 leading-tight block mb-1 transition-colors">
-                                                            {item.name}
-                                                        </Link>
-                                                        <div className="text-xs text-green-700 font-bold bg-green-50 inline-block px-1.5 py-0.5 rounded">In Stock</div>
-                                                        <div className="text-xs text-slate-500">Sold by <span className="text-slate-700 font-medium">Shivam Yarn Agencies</span></div>
+                                                {/* Product Details */}
+                                                <div className="flex-grow">
+                                                    <div className="flex justify-between items-start">
+                                                        <div className="space-y-1">
+                                                            <Link to={`/product/${pid}`} className="text-lg font-bold text-slate-800 hover:text-indigo-600 leading-tight block mb-1 transition-colors">
+                                                                {item.name}
+                                                            </Link>
+                                                            <div className="text-xs text-green-700 font-bold bg-green-50 inline-block px-1.5 py-0.5 rounded">In Stock</div>
+                                                            <div className="text-xs text-slate-500">Sold by <span className="text-slate-700 font-medium">Shivam Yarn Agencies</span></div>
 
-                                                        <div className="flex items-center gap-4 mt-4">
-                                                            {/* Qty Select */}
-                                                            <div className="flex items-center border border-slate-300 rounded-md bg-white shadow-sm h-8">
-                                                                <span className="px-2 text-xs font-bold text-slate-500 border-r border-slate-300 bg-slate-50 h-full flex items-center">Qty</span>
-                                                                <button onClick={() => updateQuantity(item.id, item.quantity - 1)} disabled={item.quantity <= 1} className="px-3 hover:bg-slate-100 text-slate-600 disabled:opacity-30 font-bold transition-colors">-</button>
-                                                                <span className="px-2 text-sm font-bold text-slate-900 w-8 text-center">{item.quantity}</span>
-                                                                <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="px-3 hover:bg-slate-100 text-slate-600 font-bold transition-colors">+</button>
+                                                            <div className="flex items-center gap-4 mt-4">
+                                                                {/* Qty Select */}
+                                                                <div className="flex items-center border border-slate-300 rounded-md bg-white shadow-sm h-8">
+                                                                    <span className="px-2 text-xs font-bold text-slate-500 border-r border-slate-300 bg-slate-50 h-full flex items-center">Qty</span>
+                                                                    <button onClick={() => updateQuantity(pid, item.quantity - 1)} disabled={item.quantity <= 1} className="px-3 hover:bg-slate-100 text-slate-600 disabled:opacity-30 font-bold transition-colors">-</button>
+                                                                    <span className="px-2 text-sm font-bold text-slate-900 w-8 text-center">{item.quantity}</span>
+                                                                    <button onClick={() => updateQuantity(pid, item.quantity + 1)} className="px-3 hover:bg-slate-100 text-slate-600 font-bold transition-colors">+</button>
+                                                                </div>
+
+                                                                <div className="h-4 w-px bg-slate-200 mx-1"></div>
+
+                                                                <button onClick={() => removeFromCart(pid)} className="text-xs font-medium text-red-600 hover:text-red-700 hover:underline">Remove</button>
+
+                                                                <div className="h-4 w-px bg-slate-200 mx-1"></div>
+
+                                                                <button className="text-xs font-medium text-slate-500 hover:text-indigo-600 hover:underline">Save for later</button>
                                                             </div>
-
-                                                            <div className="h-4 w-px bg-slate-200 mx-1"></div>
-
-                                                            <button onClick={() => removeFromCart(item.id)} className="text-xs font-medium text-red-600 hover:text-red-700 hover:underline">Remove</button>
-
-                                                            <div className="h-4 w-px bg-slate-200 mx-1"></div>
-
-                                                            <button className="text-xs font-medium text-slate-500 hover:text-indigo-600 hover:underline">Save for later</button>
                                                         </div>
-                                                    </div>
 
-                                                    <div className="text-right">
-                                                        <div className="text-lg font-bold text-slate-900">₹{((item.pricePerKg || 0) * (item.quantity || 1)).toLocaleString()}</div>
+                                                        <div className="text-right">
+                                                            <div className="text-lg font-bold text-slate-900">₹{((item.pricePerKg || 0) * (item.quantity || 1)).toLocaleString()}</div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
 
                             <div className="flex justify-end border-t border-slate-100 pt-4 mt-6">
@@ -190,20 +193,6 @@ const Cart = () => {
                             </button>
                         </div>
 
-                        {/* Recently Viewed Placeholder */}
-                        <div className="mt-4 bg-white p-4 rounded-sm border border-slate-200 shadow-sm">
-                            <h3 className="font-bold text-sm text-slate-800 mb-2">Customers who bought items in your cart also bought</h3>
-                            {/* Horizontal scroll placeholder */}
-                            <div className="flex gap-2 overflow-x-auto pb-2">
-                                {[1, 2, 3].map(i => (
-                                    <div key={i} className="flex-shrink-0 w-24 h-32 bg-slate-50 border border-slate-100 rounded p-1">
-                                        <div className="h-20 bg-slate-200 mb-1"></div>
-                                        <div className="h-3 w-16 bg-slate-200 rounded mb-1"></div>
-                                        <div className="h-3 w-10 bg-slate-200 rounded"></div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
                     </div>
 
                 </div>

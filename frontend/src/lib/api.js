@@ -12,7 +12,10 @@ const handleResponse = async (response) => {
 const buildHeaders = (token, headers = {}) => {
   const finalHeaders = { ...headers };
   if (token) {
+    console.log('API Request: Authorization token present');
     finalHeaders.Authorization = `Bearer ${token}`;
+  } else {
+    console.warn('API Request: NO AUTHORIZATION TOKEN PROVIDED');
   }
   return finalHeaders;
 };
@@ -31,12 +34,29 @@ const apiRequest = async (
     requestHeaders["Content-Type"] = requestHeaders["Content-Type"] || "application/json";
   }
 
+  console.log(`API Request: ${method} ${API_BASE_URL}${endpoint}`);
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     method,
     headers: requestHeaders,
     body: body ? (body instanceof FormData ? body : JSON.stringify(body)) : undefined,
   });
-  return handleResponse(response);
+
+  if (!response.ok) {
+    const errText = await response.text();
+    console.error(`API Error ${response.status}:`, errText);
+
+    let errorMsg = `Request failed with status ${response.status}`;
+    try {
+      const errorData = JSON.parse(errText);
+      errorMsg = errorData.message || errorMsg;
+    } catch (e) {
+      // Not JSON, use text if available
+      errorMsg = errText || errorMsg;
+    }
+    throw new Error(errorMsg);
+  }
+
+  return response.json();
 };
 
 export const fetchProducts = async (params = {}) => {
@@ -46,7 +66,12 @@ export const fetchProducts = async (params = {}) => {
 };
 
 export const createOrder = async (payload, token) => {
-  return apiRequest("/orders", { method: "POST", body: payload, token });
+  // Use specialized checkout endpoint which handles payments and emails
+  return apiRequest("/checkout/place-order", { method: "POST", body: payload, token });
+};
+
+export const verifyPayment = async (payload, token) => {
+  return apiRequest("/checkout/verify-payment", { method: "POST", body: payload, token });
 };
 
 export const loginRequest = (identifier, password, userType = 'staff') =>
@@ -199,3 +224,15 @@ export const removeFromWishlist = (token, productId) =>
     method: "DELETE",
     token,
   });
+export const checkIdentifierRequest = (identifier) => {
+  return apiRequest('/auth/check-identifier', {
+    method: 'POST',
+    body: JSON.stringify({ identifier })
+  });
+};
+export const getOrderDetailsRequest = (orderNumber, token) => {
+  return apiRequest(`/checkout/order/${orderNumber}`, {
+    method: 'GET',
+    token
+  });
+};

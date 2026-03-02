@@ -1,11 +1,15 @@
 import Joi from 'joi';
 
 const validate = (schema) => (req, res, next) => {
+    console.log(`Validation: Checking request body for ${req.originalUrl}...`);
     const { error } = schema.validate(req.body, { abortEarly: false });
     if (error) {
         const errorMessages = error.details.map((detail) => detail.message);
+        console.error(`Validation Failed for ${req.originalUrl}:`, errorMessages);
+        console.error('Request Body was:', JSON.stringify(req.body, null, 2));
         return res.status(400).json({ status: 'error', message: 'Validation failed', errors: errorMessages });
     }
+    console.log(`Validation: ${req.originalUrl} passed!`);
     next();
 };
 

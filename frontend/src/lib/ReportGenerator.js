@@ -1,13 +1,13 @@
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 // Company Details
 const COMPANY_DETAILS = {
     name: "SHIVAM YARN AGENCIES",
-    address: "86/64A J.G NAGAR 2ND STREET, PRESTIGE SHOWROOM NEAR 60 FEET ROAD, MARUTHACHALAPURAM MAIN ROAD, Pn Road, Tirupur-641602, Tamil Nadu",
-    gstin: "33AAVFS1234A1Z5", // Placeholder GSTIN if not provided
-    phone: "98430 55555",
-    email: "contact@shivam-yarn.com"
+    address: "86/64A J.G NAGAR 2ND STREET, Tirupur-641602, Tamil Nadu",
+    gstin: "33AAVFS1234A1Z5",
+    phone: "9025747946",
+    email: "sowndharsv2006@gmail.com"
 };
 
 // Formatting utilities
@@ -97,7 +97,8 @@ export const generateInvoicePDF = (sale) => {
         formatCurrency(item.taxableAmount)
     ]);
 
-    doc.autoTable({
+    doc.autoTable = null; // Ensure no conflicts
+    autoTable(doc, {
         startY: tableStartY,
         head: [['S.No', 'Product Description', 'HSN/SAC', 'Qty', 'Rate', 'Amount']],
         body: tableBody,
@@ -182,7 +183,7 @@ export const generateSalesReport = (sales, startDate, endDate) => {
         formatCurrency(s.grandTotal)
     ]);
 
-    doc.autoTable({
+    autoTable(doc, {
         startY: 35,
         head: [['Date', 'Invoice', 'Customer', 'Amount']],
         body: tableBody,
@@ -209,7 +210,7 @@ export const generatePurchaseReport = (purchases, startDate, endDate) => {
         formatCurrency(p.totalAmount)
     ]);
 
-    doc.autoTable({
+    autoTable(doc, {
         startY: 35,
         head: [['Date', 'Invoice', 'Supplier', 'Amount']],
         body: tableBody,

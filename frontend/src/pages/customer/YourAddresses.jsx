@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { updateProfileRequest } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
+import BackButton from '../../components/common/BackButton';
 
 const YourAddresses = () => {
     const { user, token, setUser } = useAuth();
@@ -82,10 +83,14 @@ const YourAddresses = () => {
 
     return (
         <div className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 font-sans">
-            <div className="flex items-center gap-2 text-sm text-slate-500 mb-6">
-                <button onClick={() => navigate('/my-account')} className="hover:underline hover:text-indigo-600">Your Account</button>
-                <span>&rsaquo;</span>
-                <span className="text-slate-800 font-medium">Your Addresses</span>
+            {/* Breadcrumb / Header */}
+            <div className="flex items-center gap-4 mb-6">
+                <BackButton to="/my-account" />
+                <div className="flex items-center gap-2 text-sm text-slate-700 font-bold">
+                    <button onClick={() => navigate('/my-account')} className="hover:underline hover:text-indigo-600">Your Account</button>
+                    <span>&rsaquo;</span>
+                    <span className="text-slate-900 font-black">Your Addresses</span>
+                </div>
             </div>
 
             <h1 className="text-3xl font-light text-slate-800 mb-8">Your Addresses</h1>
@@ -116,7 +121,7 @@ const YourAddresses = () => {
                                 <span className="absolute top-4 right-4 text-[10px] uppercase font-bold tracking-wider text-green-600 bg-green-50 px-2 py-1 rounded">Default</span>
                             )}
                             <h3 className="font-bold text-slate-800 mb-2 capitalize">{addr.type || 'Home'}</h3>
-                            <div className="text-sm text-slate-600 space-y-1 mb-6">
+                            <div className="text-sm text-slate-700 space-y-1 mb-6 font-medium">
                                 <p className="font-medium text-slate-800">{user.name}</p>
                                 <p>{addr.street}</p>
                                 <p>{addr.city}, {addr.state} {addr.postalCode}</p>

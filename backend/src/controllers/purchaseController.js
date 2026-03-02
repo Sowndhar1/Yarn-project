@@ -6,7 +6,7 @@ import { v4 as uuid } from 'uuid';
 export const listPurchases = async (req, res) => {
   try {
     const purchases = await Purchase.find()
-      .populate('receivedBy', 'name email')
+      .populate('createdBy', 'name email')
       .sort({ createdAt: -1 });
     res.json({ success: true, data: purchases });
   } catch (error) {
@@ -17,7 +17,7 @@ export const listPurchases = async (req, res) => {
 export const getPurchase = async (req, res) => {
   try {
     const purchase = await Purchase.findById(req.params.id)
-      .populate('receivedBy', 'name email');
+      .populate('createdBy', 'name email');
 
     if (!purchase) return res.status(404).json({ success: false, message: "Purchase not found" });
 

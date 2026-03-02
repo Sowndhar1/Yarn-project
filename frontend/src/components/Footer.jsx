@@ -8,8 +8,8 @@ const Footer = () => {
           <p>GSTIN: 33EGBPK6473C1ZM</p>
         </div>
         <div className="space-y-1">
-          <p>shivamyarnagencies@gmail.com</p>
-          <p>+91 90921 52148 · 99432 20448</p>
+          <p>sowndharsv2006@gmail.com</p>
+          <p>+91 90257 47946 · 99432 20448</p>
           <p>0421-4338228</p>
         </div>
         <div className="text-xs uppercase tracking-[0.3em] text-white/70">

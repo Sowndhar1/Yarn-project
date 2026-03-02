@@ -1,0 +1,172 @@
+﻿[dotenv@17.2.3] injecting env (17) from .env -- tip: ≡ƒôí add observability to secrets: https://dotenvx.com/ops
+MongoDB Connected
+[
+  {
+    "_id": "694e932a38bd6fe52af22deb",
+    "name": "Combined Cotton",
+    "pricePerKg": 320,
+    "stockKg": 152,
+    "isAvailable": true
+  },
+  {
+    "_id": "694e932a38bd6fe52af22dec",
+    "name": "Blue Lycra",
+    "pricePerKg": 275,
+    "stockKg": 98,
+    "isAvailable": true
+  },
+  {
+    "_id": "694e932a38bd6fe52af22ded",
+    "name": "Polyster Leather",
+    "pricePerKg": 245,
+    "stockKg": 552,
+    "isAvailable": true
+  },
+  {
+    "_id": "6957f19cc1dea019b874cf1e",
+    "name": "Sample",
+    "pricePerKg": 15,
+    "stockKg": 5,
+    "isAvailable": true
+  },
+  {
+    "_id": "69580450ec2bf39aa8251f92",
+    "name": "Lycra Yarn ",
+    "pricePerKg": 12,
+    "stockKg": 58,
+    "isAvailable": true
+  },
+  {
+    "_id": "695806e1ec2bf39aa8251fd7",
+    "name": "Colour",
+    "pricePerKg": 156,
+    "stockKg": 10,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22db4b5b35bac7e3d58",
+    "name": "Premium Cotton Yarn",
+    "pricePerKg": 350,
+    "stockKg": 1000,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22db4b5b35bac7e3d5d",
+    "name": "Open-End Rotor Yarn",
+    "pricePerKg": 220,
+    "stockKg": 1500,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22db4b5b35bac7e3d60",
+    "name": "Ring Spun Combed Yarn",
+    "pricePerKg": 380,
+    "stockKg": 800,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22db4b5b35bac7e3d63",
+    "name": "Polyester Textured Yarn",
+    "pricePerKg": 180,
+    "stockKg": 1955,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22db4b5b35bac7e3d66",
+    "name": "Cotton-Poly Blend 52/48",
+    "pricePerKg": 280,
+    "stockKg": 1200,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22db4b5b35bac7e3d69",
+    "name": "Spandex Covered Yarn",
+    "pricePerKg": 850,
+    "stockKg": 500,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22eb4b5b35bac7e3d6c",
+    "name": "Viscose Rayon Yarn",
+    "pricePerKg": 320,
+    "stockKg": 1358,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22eb4b5b35bac7e3d6f",
+    "name": "Dyed Cone Yarn",
+    "pricePerKg": 450,
+    "stockKg": 481,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22eb4b5b35bac7e3d72",
+    "name": "Grey Melange Yarn",
+    "pricePerKg": 340,
+    "stockKg": 1370,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22eb4b5b35bac7e3d75",
+    "name": "Chenille Fancy Yarn",
+    "pricePerKg": 550,
+    "stockKg": 400,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22eb4b5b35bac7e3d78",
+    "name": "Industrial Sewing Thread",
+    "pricePerKg": 600,
+    "stockKg": 300,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22fb4b5b35bac7e3d7b",
+    "name": "Viscose Embroidery Thread",
+    "pricePerKg": 700,
+    "stockKg": 300,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22fb4b5b35bac7e3d7e",
+    "name": "Woven Elastics",
+    "pricePerKg": 400,
+    "stockKg": 500,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22fb4b5b35bac7e3d81",
+    "name": "Plastic Cones",
+    "pricePerKg": 50,
+    "stockKg": 5000,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22fb4b5b35bac7e3d84",
+    "name": "Carton Boxes",
+    "pricePerKg": 40,
+    "stockKg": 10000,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22fb4b5b35bac7e3d87",
+    "name": "Cone Dyeing Service",
+    "pricePerKg": 120,
+    "stockKg": 9999,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d22fb4b5b35bac7e3d8a",
+    "name": "Yarn Winding Job Work",
+    "pricePerKg": 25,
+    "stockKg": 9999,
+    "isAvailable": true
+  },
+  {
+    "_id": "6988d230b4b5b35bac7e3d8d",
+    "name": "Lab Testing Service",
+    "pricePerKg": 500,
+    "stockKg": 9999,
+    "isAvailable": true
+  }
+]

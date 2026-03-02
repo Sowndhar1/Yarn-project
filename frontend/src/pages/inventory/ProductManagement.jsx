@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { createProduct, updateProduct, fetchProductDetail } from '../../lib/api';
 import { useNavigate, useParams } from 'react-router-dom';
+import BackButton from '../../components/common/BackButton';
 
 const ProductManagement = () => {
     const { token } = useAuth();
@@ -148,20 +149,12 @@ const ProductManagement = () => {
                         <h1 className="text-3xl font-black text-slate-900 tracking-tight">
                             {isEdit ? 'Modify Asset' : 'Product Asset Creation'}
                         </h1>
-                        <p className="text-slate-500 font-bold">
+                        <p className="text-slate-700 font-bold">
                             {isEdit ? `Updating ${form.name} in the marketplace.` : 'Register new yarn varieties into the global marketplace catalog.'}
                         </p>
                     </div>
 
-                    <button
-                        onClick={() => navigate(-1)}
-                        className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-slate-400 hover:bg-slate-900 hover:text-white transition-all shadow-sm ring-1 ring-slate-100 group"
-                        title="Back to Marketplace"
-                    >
-                        <svg className="h-6 w-6 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
+                    <BackButton label="Back to Marketplace" />
                 </div>
 
                 <form onSubmit={handleSubmit} className="mt-12 grid gap-10 lg:grid-cols-2">

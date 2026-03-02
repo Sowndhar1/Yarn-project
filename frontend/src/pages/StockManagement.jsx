@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import BackButton from '../components/common/BackButton';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -146,12 +147,10 @@ const StockManagement = () => {
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-4">
-          <button onClick={() => navigate(-1)} className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-slate-400 shadow-sm ring-1 ring-slate-100 hover:text-indigo-600 transition-colors">
-            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-          </button>
+          <BackButton />
           <div>
             <h1 className="text-3xl font-bold tracking-tight text-slate-900">Stock Management</h1>
-            <p className="mt-1 text-slate-500 font-medium">Monitor and update your inventory levels</p>
+            <p className="mt-1 text-slate-700 font-bold">Monitor and update your inventory levels</p>
           </div>
         </div>
         <button
@@ -381,7 +380,7 @@ const StockManagement = () => {
             <div className="mb-8 flex items-center justify-between">
               <div>
                 <h3 className="text-xl font-black text-slate-900">Update Stock Level</h3>
-                <p className="text-sm font-bold text-slate-400">For <span className="text-indigo-600">{selectedProduct.product?.name}</span></p>
+                <p className="text-sm font-bold text-slate-700">For <span className="text-indigo-900">{selectedProduct.product?.name}</span></p>
               </div>
               <button onClick={() => setShowAdjustment(false)} className="rounded-xl bg-slate-100 p-2 hover:bg-slate-200 transition-colors">
                 <svg className="h-5 w-5 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>

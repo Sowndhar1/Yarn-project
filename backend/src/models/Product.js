@@ -53,7 +53,7 @@ const productSchema = new mongoose.Schema(
         // Yarn-specific attributes
         yarnType: {
             type: String,
-            enum: ['cotton', 'wool', 'acrylic', 'polyester', 'silk', 'linen', 'bamboo', 'alpaca', 'cashmere', 'blend', 'elastic', 'spandex', 'viscose', 'rayon', 'nylon', 'melange'],
+            enum: ['cotton', 'wool', 'acrylic', 'polyester', 'silk', 'linen', 'bamboo', 'alpaca', 'cashmere', 'blend', 'elastic', 'spandex', 'viscose', 'rayon', 'nylon', 'melange', 'service'],
             required: true,
         },
         weight: {
@@ -116,6 +116,10 @@ const productSchema = new mongoose.Schema(
             default: 0,
             min: 0,
             max: 100,
+        },
+        gstRate: {
+            type: Number,
+            default: 18,
         },
     },
     {

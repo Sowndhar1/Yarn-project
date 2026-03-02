@@ -1,4 +1,4 @@
-import express from 'express'; // Restart trigger
+import express from 'express'; // Forced reload for cost changes
 import cors from "cors";
 import morgan from "morgan";
 import connectDB from "./database/db.js";
@@ -21,6 +21,18 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
+app.use((req, res, next) => {
+  if (req.method !== 'GET') {
+    console.log(`[REQUEST_BODY_DEBUG] ${req.method} ${req.url}:`, JSON.stringify(req.body, null, 2));
+  }
+  next();
+});
+
+app.get("/public-ping", (req, res) => res.json({
+  message: "Server is accepting requests",
+  timestamp: Date.now(),
+  debug: "v2-loud-logs"
+}));
 
 app.get("/", (_req, res) => {
   res.json({

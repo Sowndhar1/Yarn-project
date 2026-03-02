@@ -30,6 +30,8 @@ export const authenticate = async (req, res, next) => {
       isActive: true
     });
 
+    console.log('Auth Middleware: Decoded ID:', decoded.id, 'User found:', !!user);
+
     if (!user) {
       return res.status(401).json({ message: "User no longer active" });
     }

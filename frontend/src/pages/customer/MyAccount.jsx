@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { fetchMyOrders } from '../../lib/api';
 import { useNavigate } from 'react-router-dom';
+import BackButton from '../../components/common/BackButton';
 
 const MyAccount = () => {
   const { user, token, logout } = useAuth();
@@ -49,7 +50,7 @@ const MyAccount = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
       ),
-      action: () => window.location.href = "mailto:support@shivamyarn.com" // Simple action for now
+      action: () => window.location.href = "mailto:sowndharsv2006@gmail.com" // Updated to user's personal email
     }
   ];
 
@@ -70,9 +71,14 @@ const MyAccount = () => {
   return (
     <div className="max-w-6xl mx-auto py-12 px-4 sm:px-6 lg:px-8 font-sans">
       <div className="mb-8 border-b border-slate-200 pb-4 flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-light text-slate-800">Your Account</h1>
-          <p className="mt-1 text-sm text-slate-500">Manage your details and view your orders</p>
+        <div className="flex items-center gap-6">
+          <BackButton />
+          <div>
+            <h1 className="text-3xl font-light text-slate-800">
+              Welcome, <span className="font-bold text-indigo-600 italic">Bro {user?.name || 'Customer'}</span>
+            </h1>
+            <p className="mt-1 text-sm text-slate-700 font-bold">Manage your details and view your orders</p>
+          </div>
         </div>
         <button
           onClick={logout}

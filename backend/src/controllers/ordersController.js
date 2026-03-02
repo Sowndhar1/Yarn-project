@@ -110,8 +110,10 @@ export const createOrder = async (req, res) => {
       orderNumber: `ORD-${Date.now()}`,
       customer: req.user?.id,
       items: orderItems,
-      totalAmount,
-      subtotal: totalAmount,
+      totalAmount: bodyTotal || totalAmount,
+      subtotal: subtotal || totalAmount,
+      shippingCost: shippingCost || 0,
+      gstAmount: gstAmount || 0,
       shippingAddress: shippingAddress || {},
       billingAddress: billingAddress || {},
       status: 'pending',
@@ -156,7 +158,10 @@ export const getOrder = async (req, res) => {
 // Get current user's orders
 export const getMyOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ customer: req.user.id })
+    const orders = await Order.find({
+      customer: req.user.id,
+      status: { $ne: 'pending' } // Hide 'pending' logs as requested
+    })
       .populate('items.product', 'name brand thumbnail')
       .sort({ createdAt: -1 });
     res.json(orders);

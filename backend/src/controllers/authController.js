@@ -262,3 +262,41 @@ export const updateProfile = async (req, res) => {
     res.status(500).json({ message: "Failed to update profile" });
   }
 };
+
+export const checkIdentifier = async (req, res) => {
+  try {
+    const { identifier } = req.body;
+    if (!identifier) {
+      return res.status(400).json({ message: "Identifier is required" });
+    }
+
+    const cleanIdentifier = identifier.trim();
+
+    // Check for user existence by email, phone, or username
+    const user = await User.findOne({
+      $or: [
+        { email: { $regex: new RegExp(`^${cleanIdentifier}$`, 'i') } },
+        { phone: cleanIdentifier },
+        { username: { $regex: new RegExp(`^${cleanIdentifier}$`, 'i') } }
+      ]
+    });
+
+    if (user) {
+      // Determine what type of identifier matched
+      let type = 'username';
+      if (user.email.toLowerCase() === cleanIdentifier.toLowerCase()) type = 'email';
+      else if (user.phone === cleanIdentifier) type = 'phone';
+
+      return res.json({
+        exists: true,
+        message: "Identity verified",
+        type
+      });
+    }
+
+    return res.json({ exists: false, message: "Identity not registered" });
+  } catch (error) {
+    console.error('Check identifier error:', error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

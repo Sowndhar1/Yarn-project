@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
+import BackButton from "../components/common/BackButton";
 
 const AccountSettings = () => {
   const { user, changePassword, logout } = useAuth();
@@ -37,9 +38,12 @@ const AccountSettings = () => {
   return (
     <section className="mx-auto max-w-3xl space-y-8">
       <header className="rounded-[32px] bg-white p-8 shadow-xl">
-        <p className="text-xs uppercase tracking-[0.4em] text-slate-500">Profile</p>
+        <div className="flex items-center gap-4 mb-4">
+          <BackButton />
+          <p className="text-xs uppercase tracking-[0.4em] text-slate-700 font-bold">Profile</p>
+        </div>
         <h1 className="mt-2 font-display text-3xl text-indigoInk">Account settings</h1>
-        <p className="mt-2 text-sm text-slate-500">
+        <p className="mt-2 text-sm text-slate-700 font-medium">
           Update your password and sign out of the Shivam Yarn console.
         </p>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -63,7 +67,7 @@ const AccountSettings = () => {
       </header>
 
       <section className="rounded-[32px] bg-white p-8 shadow-xl">
-        <p className="text-xs uppercase tracking-[0.4em] text-slate-500">Security</p>
+        <p className="text-xs uppercase tracking-[0.4em] text-slate-700 font-bold">Security</p>
         <h2 className="mt-2 text-2xl font-semibold text-indigoInk">Change password</h2>
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
@@ -98,11 +102,10 @@ const AccountSettings = () => {
           </div>
           {status.message && (
             <p
-              className={`rounded-2xl px-4 py-3 text-sm ${
-                status.type === "success"
+              className={`rounded-2xl px-4 py-3 text-sm ${status.type === "success"
                   ? "bg-mintGlow/20 text-emerald-700"
                   : "bg-rose-50 text-rose-600"
-              }`}
+                }`}
             >
               {status.message}
             </p>

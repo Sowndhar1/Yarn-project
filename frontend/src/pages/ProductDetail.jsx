@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { fetchProductDetail } from '../lib/api';
+import BackButton from '../components/common/BackButton';
 import { useCart } from '../context/CartContext';
 import { useFavorites } from '../context/FavoritesContext'; // Added import
 import { useAuth } from '../context/AuthContext';
@@ -98,12 +99,7 @@ const ProductDetail = () => {
       {/* Breadcrumb / Back Nav */}
       <div className="bg-white py-4 px-4 shadow-sm border-b border-slate-200 mb-8 sticky top-0 z-20 backdrop-blur-md bg-white/90">
         <div className="max-w-[1600px] mx-auto flex items-center justify-between">
-          <button onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')} className="group text-xs font-bold text-slate-500 hover:text-indigoInk flex items-center gap-2 transition-colors">
-            <div className="p-1.5 rounded-full bg-slate-100 group-hover:bg-indigoInk/10 transition-colors">
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
-            </div>
-            Back
-          </button>
+          <BackButton />
           <div className="flex gap-2 text-xs font-medium text-slate-400">
             <span onClick={() => navigate('/')} className="hover:text-indigoInk cursor-pointer transition-colors">Home</span>
             <span>/</span>
@@ -187,7 +183,7 @@ const ProductDetail = () => {
 
             <div className="relative z-10 flex flex-col md:flex-row gap-8 justify-between items-start">
               <div className="space-y-1">
-                <div className="text-sm font-bold text-slate-400 uppercase tracking-wider">Price</div>
+                <div className="text-sm font-black text-slate-700 uppercase tracking-wider">Price</div>
                 <div className="flex items-baseline gap-1">
                   <span className="text-5xl font-black text-indigoInk tracking-tighter">₹{product.pricePerKg?.toLocaleString()}</span>
                   <span className="text-xl font-medium text-slate-400">/ kg</span>
