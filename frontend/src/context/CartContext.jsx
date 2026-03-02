@@ -172,8 +172,8 @@ export const CartProvider = ({ children }) => {
             0
         );
 
-        const gst = 0; // Testing: Set to 0 for all orders
-        const shipping = 0; // Testing: Set to 0 for all orders
+        const gst = Math.round(subtotal * 0.18);
+        const shipping = 0;
         const total = subtotal + gst + shipping;
 
         return {
