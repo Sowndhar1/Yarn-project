@@ -6,6 +6,8 @@ import {
   fetchProfile,
   changePasswordRequest,
   updateProfileRequest,
+  requestOTP as requestOTPAPI,
+  verifyOTP as verifyOTPAPI,
 } from "../lib/api.js";
 
 const AuthContext = createContext(null);
@@ -149,6 +151,44 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loginWithOTP = async (identifier, password, type = 'staff') => {
+    setError("");
+    try {
+      const result = await requestOTPAPI({ identifier, password, type, isRegistration: false });
+      return result;
+    } catch (err) {
+      setError(err.message || "Login failed.");
+      throw err;
+    }
+  };
+
+  const registerWithOTP = async (payload) => {
+    setError("");
+    try {
+      const result = await requestOTPAPI({ ...payload, isRegistration: true, identifier: payload.email });
+      return result;
+    } catch (err) {
+      setError(err.message || "Registration failed.");
+      throw err;
+    }
+  };
+
+  const completeOTPVerification = async (identifier, otp, isRegistration = false) => {
+    setError("");
+    try {
+      const result = await verifyOTPAPI({ identifier, otp, isRegistration });
+      setToken(result.token);
+      setUserType(result.user.role === 'customer' ? 'customer' : 'staff');
+      localStorage.setItem(STORAGE_KEY, result.token);
+      localStorage.setItem(USER_TYPE_KEY, result.user.role === 'customer' ? 'customer' : 'staff');
+      setUser(result.user);
+      return result.user;
+    } catch (err) {
+      setError(err.message || "Verification failed.");
+      throw err;
+    }
+  };
+
   const value = useMemo(
     () => ({
       user,
@@ -159,11 +199,11 @@ export const AuthProvider = ({ children }) => {
       hasRole,
       hasAnyRole,
       setError,
-      login,
-      logout,
-      register,
       changePassword,
       updateProfile,
+      loginWithOTP,
+      registerWithOTP,
+      completeOTPVerification,
       setUser, // Export setUser
     }),
     [user, token, loading, error, userType]

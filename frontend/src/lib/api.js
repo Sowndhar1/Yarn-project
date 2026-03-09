@@ -24,21 +24,20 @@ const apiRequest = async (
   endpoint,
   { method = "GET", token, body, headers = {} } = {}
 ) => {
-  const isJsonBody =
-    body && !(body instanceof FormData) && headers["Content-Type"] !== "application/json";
   const requestHeaders = buildHeaders(token, headers);
-  const payload =
-    body && isJsonBody ? JSON.stringify(body) : body instanceof FormData ? body : JSON.stringify(body);
+  let finalBody = body;
 
   if (body && !(body instanceof FormData)) {
     requestHeaders["Content-Type"] = requestHeaders["Content-Type"] || "application/json";
+    // Stringify if it's an object and not already a string
+    finalBody = typeof body === "string" ? body : JSON.stringify(body);
   }
 
   console.log(`API Request: ${method} ${API_BASE_URL}${endpoint}`);
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     method,
     headers: requestHeaders,
-    body: body ? (body instanceof FormData ? body : JSON.stringify(body)) : undefined,
+    body: finalBody,
   });
 
   if (!response.ok) {
@@ -236,3 +235,16 @@ export const getOrderDetailsRequest = (orderNumber, token) => {
     token
   });
 };
+
+// OTP Verification API
+export const requestOTP = (payload) =>
+  apiRequest("/auth/request-otp", {
+    method: "POST",
+    body: payload,
+  });
+
+export const verifyOTP = (payload) =>
+  apiRequest("/auth/verify-otp", {
+    method: "POST",
+    body: payload,
+  });

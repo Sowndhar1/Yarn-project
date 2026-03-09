@@ -3,6 +3,7 @@ import User from "../models/User.js";
 import CustomerProfile from "../models/CustomerProfile.js";
 import StaffProfile from "../models/StaffProfile.js";
 import AdminProfile from "../models/AdminProfile.js";
+import { sendOTPEmail } from "../services/emailService.js";
 import fs from 'fs';
 import path from 'path';
 
@@ -298,5 +299,113 @@ export const checkIdentifier = async (req, res) => {
   } catch (error) {
     console.error('Check identifier error:', error);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+/**
+ * Handle initial login/registration request by sending OTP
+ */
+export const requestOTP = async (req, res) => {
+  try {
+    const { identifier, isRegistration, name, password } = req.body;
+    if (!identifier) return res.status(400).json({ message: "Identifier is required" });
+
+    let user;
+    if (isRegistration) {
+      // Registration flow
+      if (!name || !password) return res.status(400).json({ message: "Name and password are required for registration" });
+
+      const existingUser = await User.findOne({ email: identifier.toLowerCase() });
+      if (existingUser) return res.status(400).json({ message: "User already exists" });
+
+      // Create temporary unverified user
+      user = new User({
+        name,
+        email: identifier.toLowerCase(),
+        username: identifier.split('@')[0],
+        password,
+        role: 'customer',
+        isActive: true,
+        isVerified: false
+      });
+    } else {
+      // Login flow
+      user = await User.findOne({
+        $or: [
+          { email: identifier.toLowerCase() },
+          { username: identifier.toLowerCase() }
+        ]
+      });
+      if (!user) return res.status(404).json({ message: "User not found" });
+    }
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.otp = otp;
+    user.otpExpires = Date.now() + 5 * 60 * 1000; // 5 minutes
+    await user.save();
+
+    // Send Email
+    await sendOTPEmail(user.email, otp, user.name);
+
+    res.json({ success: true, message: "Verification code sent to email" });
+  } catch (error) {
+    console.error('Request OTP error:', error);
+    res.status(500).json({ message: "Failed to send verification code" });
+  }
+};
+
+/**
+ * Verify OTP and complete authentication
+ */
+export const verifyOTP = async (req, res) => {
+  try {
+    const { identifier, otp, isRegistration } = req.body;
+    if (!identifier || !otp) return res.status(400).json({ message: "Identifier and code are required" });
+
+    const user = await User.findOne({
+      $or: [
+        { email: identifier.toLowerCase() },
+        { username: identifier.toLowerCase() }
+      ]
+    });
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Check OTP
+    if (user.otp !== otp || user.otpExpires < Date.now()) {
+      return res.status(400).json({ message: "Invalid or expired verification code" });
+    }
+
+    // Clear OTP and verify user
+    user.otp = null;
+    user.otpExpires = null;
+    user.isVerified = true;
+    await user.save();
+
+    // Create profile if registration
+    if (isRegistration) {
+      const existingProfile = await CustomerProfile.findOne({ userId: user._id });
+      if (!existingProfile) {
+        await CustomerProfile.create({ userId: user._id });
+      }
+    }
+
+    // Standard profile fetch for token
+    let profile = null;
+    if (user.role === 'customer') profile = await CustomerProfile.findOne({ userId: user._id });
+    else if (user.role === 'admin') profile = await AdminProfile.findOne({ userId: user._id });
+    else profile = await StaffProfile.findOne({ userId: user._id });
+
+    const token = signToken({ ...user.toObject(), id: user._id.toString() });
+    res.json({
+      token,
+      user: sanitizeUser(user, profile),
+      redirectTo: getRedirectPath(user.role),
+      message: isRegistration ? "Registration successful" : "Login successful"
+    });
+  } catch (error) {
+    console.error('Verify OTP error:', error);
+    res.status(500).json({ message: "Verification failed" });
   }
 };

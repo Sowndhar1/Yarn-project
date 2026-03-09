@@ -120,3 +120,50 @@ export const sendOrderConfirmationEmail = async (order, customerEmail) => {
         return { success: false, error: error.message };
     }
 };
+
+/**
+ * Send OTP for verification
+ * @param {string} email - Recipient email
+ * @param {string} otp - 6-digit code
+ * @param {string} userName - User name
+ */
+export const sendOTPEmail = async (email, otp, userName = 'Valued Customer') => {
+    try {
+        const mailOptions = {
+            from: `"Shivam yarn agencies" <${process.env.EMAIL_FROM || 'orders@yarnbiz.in'}>`,
+            to: email,
+            subject: `Verification Code: ${otp}`,
+            html: `
+                <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 500px; margin: auto; border: 1px solid #eee; padding: 40px; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <h1 style="color: #4f46e5; margin: 0; font-size: 24px;">Shivam yarn agencies</h1>
+                        <p style="color: #6b7280; font-size: 14px; margin-top: 5px;">Secure Verification System</p>
+                    </div>
+                    
+                    <p style="font-size: 16px;">Hello <strong>${userName}</strong>,</p>
+                    <p style="font-size: 14px; color: #4b5563;">To complete your authentication, please use the following one-time password (OTP). This code is sensitive and should not be shared.</p>
+                    
+                    <div style="background-color: #f5f3ff; padding: 30px; border-radius: 15px; text-align: center; margin: 30px 0;">
+                        <span style="font-family: 'Courier New', Courier, monospace; font-size: 36px; font-weight: 800; color: #4f46e5; letter-spacing: 12px;">${otp}</span>
+                        <p style="font-size: 11px; color: #9ca3af; margin-top: 15px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px;">Expires in 5 minutes</p>
+                    </div>
+                    
+                    <p style="font-size: 13px; color: #6b7280; text-align: center;">If you didn't request this code, please ignore this email or contact support if you have concerns.</p>
+                    
+                    <div style="border-top: 1px solid #f3f4f6; margin-top: 40px; pt-30px; text-align: center;">
+                        <p style="font-size: 11px; color: #9ca3af; margin-top: 20px;">
+                            &copy; ${new Date().getFullYear()} Shivam yarn agencies. Professional Textile Solutions.
+                        </p>
+                    </div>
+                </div>
+            `,
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log('OTP email sent to', email, ':', info.messageId);
+        return { success: true };
+    } catch (error) {
+        console.error('Error sending OTP email:', error);
+        return { success: false, error: error.message };
+    }
+};
